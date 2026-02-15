@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTP — Mandat</title>
+  <link rel="icon" href="./KWP.png">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="brand">
+        <img src="./KWP.png" alt="KWP">
+        <div><h1>MTP — Wystaw mandat</h1><p>KWP GDAŃSK · Summer RP</p></div>
+      </div>
+      <div class="topbar">
+        <div id="sessionBadge" class="badge"><span class="dot warn"></span>Brak sesji</div>
+        <a class="btn btn-ghost" href="./index.html"><span class="meta"><strong>Powrót</strong><span>Panel</span></span><span class="chev">←</span></a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-title"><h2>Formularz mandatu</h2><small>Webhook: Mandat</small></div>
+        <div class="hr"></div>
+
+        <form id="mandatForm" class="form">
+          <div>
+            <label>Imię i nazwisko (IC) *</label>
+            <input id="imie" required>
+          </div>
+          <div>
+            <label>Nick (OOC) *</label>
+            <input id="nick" required>
+          </div>
+
+          <div>
+            <label>Data wystawienia *</label>
+            <input id="dataWystawienia" type="datetime-local" required>
+          </div>
+          <div>
+            <label>Godzina zdarzenia</label>
+            <input id="godzinaZdarzenia" placeholder="np. 21:15">
+          </div>
+
+          <div>
+            <label>Miejsce *</label>
+            <input id="miejsce" required>
+          </div>
+          <div>
+            <label>Pojazd</label>
+            <input id="pojazd" placeholder="np. Sultan RS">
+          </div>
+
+          <div>
+            <label>Przyczyna *</label>
+            <select id="przyczyna" onchange="pokazPoleArtykulu()" required>
+              <option value="" selected>Wybierz…</option>
+              <option value="Przekroczenie prędkości">Przekroczenie prędkości</option>
+              <option value="Nieprawidłowe parkowanie">Nieprawidłowe parkowanie</option>
+              <option value="Niebezpieczna jazda">Niebezpieczna jazda</option>
+              <option value="inne">Inne (z artykułem)</option>
+            </select>
+          </div>
+          <div id="innePrzyczynaDiv" style="display:none">
+            <label>Artykuł (wymagane) *</label>
+            <input id="innePrzyczyna" placeholder="np. Art. 12 §2">
+          </div>
+
+          <div>
+            <label>Kwota (PLN) *</label>
+            <input id="kwota" type="number" min="0" step="1" required>
+          </div>
+          <div>
+            <label>Punkty *</label>
+            <input id="punkty" type="number" min="0" step="1" required>
+          </div>
+
+          <div class="full">
+            <label>Funkcjonariusz *</label>
+            <input id="funkcjonariusz" required placeholder="Uzupełni się po logowaniu">
+          </div>
+
+          <div id="statusMandat" class="status">—</div>
+
+          <div class="actions">
+            <button class="btn btn-primary" type="submit">
+              <span class="meta"><strong>Wyślij mandat</strong><span>Discord</span></span><span class="chev">→</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIN GATE -->
+  <div id="lock" class="lock">
+    <div class="lock-panel">
+      <div class="lock-head"><h3>Autoryzacja dostępu — MTP</h3><p>KWP GDAŃSK · Wymagany identyfikator i PIN</p></div>
+      <div class="lock-body">
+        <div><label for="officerSelect">Funkcjonariusz</label><select id="officerSelect"></select></div>
+        <div>
+          <label for="pinInput">PIN</label>
+          <input id="pinInput" type="password" inputmode="numeric" placeholder="••••" maxlength="12" autocomplete="off">
+          <div id="statusGate" class="small">—</div>
+        </div>
+        <div class="lock-actions">
+          <button id="loginBtn" class="btn btn-primary" type="button"><span class="meta"><strong>Zaloguj</strong><span>PIN</span></span><span class="chev">↵</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

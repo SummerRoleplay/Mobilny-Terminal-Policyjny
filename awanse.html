@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTP — Zarząd: Awanse</title>
+  <link rel="icon" href="./KWP.png">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body data-board="true">
+  <div class="container">
+    <div class="header">
+      <div class="brand">
+        <img src="./KWP.png" alt="KWP">
+        <div><h1>ZARZĄD MTP — Awanse</h1><p>Tylko dla zarządu</p></div>
+      </div>
+      <div class="topbar">
+        <div id="sessionBadge" class="badge"><span class="dot warn"></span>Brak sesji</div>
+        <button id="logoutBtn" class="btn btn-ghost" type="button">Wyloguj</button>
+        <a class="btn btn-ghost" href="./index.html">Powrót</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-title"><h2>Awans / zmiana stopnia</h2><small>Webhook: zarząd-awanse</small></div>
+        <div class="hr"></div>
+
+        <form id="awanseForm" class="form">
+          <div><label>Funkcjonariusz *</label><input id="aName" required></div>
+          <div><label>ID *</label><input id="aId" required></div>
+
+          <div><label>Z *</label><input id="aFrom" required placeholder="np. Posterunkowy"></div>
+          <div><label>Na *</label><input id="aTo" required placeholder="np. Starszy posterunkowy"></div>
+
+          <div class="full"><label>Uzasadnienie *</label><textarea id="aWhy" required></textarea></div>
+
+          <div><label>Data wejścia (opcjonalnie)</label><input id="aDate" placeholder="np. 13.02.2026"></div>
+          <div><label>Autor (ZARZĄD)</label><input id="autorBoard"></div>
+
+          <div id="statusAwanse" class="status full">—</div>
+          <div class="actions"><button class="btn btn-primary" type="submit">Wyślij</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="lock" class="lock">
+    <div class="lock-panel">
+      <div class="lock-head"><h3>Autoryzacja dostępu — MTP</h3><p>Wymagany identyfikator i PIN</p></div>
+      <div class="lock-body">
+        <div><label>Funkcjonariusz</label><select id="officerSelect"></select></div>
+        <div><label>PIN</label><input id="pinInput" type="password" inputmode="numeric" maxlength="12"><div id="statusGate" class="small">—</div></div>
+        <div class="lock-actions"><button id="loginBtn" class="btn btn-primary" type="button">Zaloguj</button></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

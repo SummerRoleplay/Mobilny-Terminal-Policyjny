@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTP | KWP GDAŃSK — Summer RP</title>
+  <link rel="icon" href="./KWP.png">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <div class="brand">
+        <img src="./KWP.png" alt="KWP">
+        <div>
+          <h1>Mobilny Terminal Policyjny — KWP GDAŃSK</h1>
+          <p>Summer RP · MTP</p>
+        </div>
+      </div>
+
+      <div class="topbar">
+        <div id="sessionBadge" class="badge"><span class="dot warn"></span>Brak sesji</div>
+
+        <button id="logoutBtn" class="btn btn-ghost" type="button">
+          <span class="meta">
+            <strong>Wyloguj</strong>
+            <span>Zakończ sesję</span>
+          </span>
+          <span class="chev">⎋</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- PANEL GŁÓWNY -->
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-title">
+          <h2>Panel główny</h2>
+          <small>Wybierz moduł</small>
+        </div>
+        <div class="hr"></div>
+
+        <div class="tabs">
+          <a class="btn" href="./mandat.html">
+            <span class="meta">
+              <strong>Wystaw mandat</strong>
+              <span>Mandaty</span>
+            </span>
+            <span class="chev">→</span>
+          </a>
+
+          <a class="btn" href="./wniosek.html">
+            <span class="meta">
+              <strong>Wniosek do sądu</strong>
+              <span>Dokumentacja</span>
+            </span>
+            <span class="chev">→</span>
+          </a>
+
+          <a class="btn" href="./raporty.html">
+            <span class="meta">
+              <strong>Raporty</strong>
+              <span>Patrol / Interwencja</span>
+            </span>
+            <span class="chev">→</span>
+          </a>
+
+          <a class="btn" href="./zatrzymanie.html">
+            <span class="meta">
+              <strong>Protokół zatrzymania</strong>
+              <span>Czynności</span>
+            </span>
+            <span class="chev">→</span>
+          </a>
+        </div>
+
+        <!-- ZARZĄD -->
+        <div id="zarzadLinks" style="display:none; margin-top:14px;">
+          <div class="hr"></div>
+          <div class="card-title" style="margin-bottom:10px;">
+            <h2>Panel Zarządu</h2>
+            <small>Dostęp ograniczony</small>
+          </div>
+
+          <div class="tabs">
+            <a class="btn btn-primary" href="./adaptacja.html">
+              <span class="meta">
+                <strong>ZARZĄD: Adaptacja</strong>
+                <span>Wyniki adaptacji</span>
+              </span>
+              <span class="chev">→</span>
+            </a>
+
+            <a class="btn btn-primary" href="./nagany.html">
+              <span class="meta">
+                <strong>ZARZĄD: Nagany</strong>
+                <span>Dyscyplina</span>
+              </span>
+              <span class="chev">→</span>
+            </a>
+
+            <a class="btn btn-primary" href="./pochwaly.html">
+              <span class="meta">
+                <strong>ZARZĄD: Pochwały</strong>
+                <span>Wyróżnienia</span>
+              </span>
+              <span class="chev">→</span>
+            </a>
+
+            <a class="btn btn-primary" href="./awanse.html">
+              <span class="meta">
+                <strong>ZARZĄD: Awanse</strong>
+                <span>Zmiany stopni</span>
+              </span>
+              <span class="chev">→</span>
+            </a>
+
+            <a class="btn btn-primary" href="./zwolnienia.html">
+              <span class="meta">
+                <strong>ZARZĄD: Zwolnienia</strong>
+                <span>Decyzje końcowe</span>
+              </span>
+              <span class="chev">→</span>
+            </a>
+          </div>
+        </div>
+        <!-- /ZARZĄD -->
+
+      </div>
+    </div>
+
+    <!-- TRYB PATROLU -->
+    <div class="card" id="patrolModeBox" style="margin-top:16px;">
+      <div class="card-inner">
+        <div class="card-title">
+          <h2>Tryb patrolu</h2>
+          <small>Start/Stop + szybkie zdarzenia</small>
+        </div>
+        <div class="hr"></div>
+
+        <div class="patrol-grid">
+          <div>
+            <label>Skład patrolu (partner / partnerzy)</label>
+            <input id="patrolPartner" placeholder="np. 480000 — Post. — Adam Nowak, 48000 — St. Post. — Jan Kowalski">
+          </div>
+
+          <div>
+            <label>Znak patrolu (call sign)</label>
+            <input id="patrolCallsign" placeholder="np. 21">
+          </div>
+
+          <div class="full">
+            <label>Rejon / sektor</label>
+            <input id="patrolArea" placeholder="np. Gdańsk Śródmieście / Obwodnica / Port">
+          </div>
+
+          <div class="patrol-status full">
+            <div class="patrol-left">
+              <div class="pill" id="patrolStatePill">NIEAKTYWNY</div>
+              <div class="patrol-meta">
+                <div><span class="muted">Patrol ID:</span> <b id="patrolIdText">—</b></div>
+                <div><span class="muted">Czas:</span> <b id="patrolTimeText">00:00:00</b></div>
+              </div>
+            </div>
+
+            <div class="patrol-actions">
+              <button class="btn btn-primary" type="button" onclick="patrolStart()">
+                <span class="meta"><strong>Start</strong><span>Rozpocznij służbę</span></span><span class="chev">▶</span>
+              </button>
+              <button class="btn btn-ghost" type="button" onclick="patrolStop()">
+                <span class="meta"><strong>Stop</strong><span>Zakończ służbę</span></span><span class="chev">■</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="full">
+            <div class="patrol-quick">
+              <button class="btn" type="button" onclick="patrolEvent('Kontrola drogowa')">
+                <span class="meta"><strong>Kontrola</strong><span>traffic stop</span></span><span class="chev">→</span>
+              </button>
+              <button class="btn" type="button" onclick="patrolEvent('Interwencja')">
+                <span class="meta"><strong>Interwencja</strong><span>zgłoszenie</span></span><span class="chev">→</span>
+              </button>
+              <button class="btn" type="button" onclick="patrolEvent('Pościg')">
+                <span class="meta"><strong>Pościg</strong><span>pursuit</span></span><span class="chev">→</span>
+              </button>
+              <button class="btn" type="button" onclick="patrolEvent('Zatrzymanie')">
+                <span class="meta"><strong>Zatrzymanie</strong><span>detention</span></span><span class="chev">→</span>
+              </button>
+              <button class="btn btn-primary" type="button" onclick="patrolNote()">
+                <span class="meta"><strong>Notatka</strong><span>krótka informacja</span></span><span class="chev">✎</span>
+              </button>
+            </div>
+
+            <div id="patrolStatus" class="status">—</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- /TRYB PATROLU -->
+
+  </div>
+
+  <!-- PIN GATE -->
+  <div id="lock" class="lock">
+    <div class="lock-panel">
+      <div class="lock-head">
+        <h3>Autoryzacja dostępu — MTP</h3>
+        <p>KWP GDAŃSK · Wymagany numer legitymacji i PIN</p>
+      </div>
+
+      <div class="lock-body">
+        <div>
+          <label for="officerIdInput">Numer legitymacji</label>
+          <input id="officerIdInput" type="text" inputmode="numeric" placeholder="np. 480000" maxlength="12" autocomplete="off">
+        </div>
+
+        <div>
+          <label for="pinInput">PIN</label>
+          <input id="pinInput" type="password" inputmode="numeric" placeholder="••••" maxlength="12" autocomplete="off">
+          <div id="statusGate" class="small">—</div>
+        </div>
+
+        <div class="lock-actions">
+          <button id="loginBtn" class="btn btn-primary" type="button">
+            <span class="meta">
+              <strong>Zaloguj</strong>
+              <span>Weryfikacja PIN</span>
+            </span>
+            <span class="chev">↵</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
