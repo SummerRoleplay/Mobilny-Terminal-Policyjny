@@ -279,3 +279,69 @@ body::before{
   background-size: cover;
   background-attachment: fixed;
 }
+/* ==========================
+   FIX TRYB PATROLU LAYOUT
+========================== */
+
+#patrolModeBox .patrol-grid{
+  display:grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 12px !important;
+  align-items: start !important;
+}
+
+@media (max-width: 900px){
+  #patrolModeBox .patrol-grid{
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* pełna szerokość dla elementów full */
+#patrolModeBox .patrol-grid .full{
+  grid-column: 1 / -1 !important;
+}
+
+/* status + przyciski Start/Stop obok */
+#patrolModeBox .patrol-status{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  padding:12px !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+  border-radius:16px !important;
+  background:rgba(0,0,0,.16) !important;
+}
+
+#patrolModeBox .patrol-left{
+  display:flex !important;
+  align-items:center !important;
+  gap:12px !important;
+  flex-wrap:wrap !important;
+}
+
+#patrolModeBox .patrol-actions{
+  display:flex !important;
+  gap:10px !important;
+  flex-wrap:wrap !important;
+  justify-content:flex-end !important;
+}
+
+/* quick buttons w siatce */
+#patrolModeBox .patrol-quick{
+  display:grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap:10px !important;
+}
+
+@media (max-width: 1100px){
+  #patrolModeBox .patrol-quick{
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* żeby buttony nie robiły się “wąskie” */
+#patrolModeBox .patrol-quick .btn{
+  width:100% !important;
+}
+
