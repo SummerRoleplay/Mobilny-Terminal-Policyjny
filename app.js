@@ -35,7 +35,7 @@ const OFFICERS = [
   { id: "481010", name: "Kamil Brzoza",           rank: "Posterunkowy",          pin: "5913" },
   { id: "481111", name: "Szymon Klacz",           rank: "Posterunkowy",          pin: "7630" },
   { id: "481212", name: "Kamil Wojciechowski",    rank: "Posterunkowy",          pin: "4182" },
-  { id: "481313", name: "Tomasz Dunczyk",         rank: "Posterunkowy",          pin: "1234" } // zmień PIN jak chcesz
+  { id: "481313", name: "Tomasz Dunczyk",         rank: "Posterunkowy",          pin: "6053" }
 ];
 
 const SESSION_KEY = "mtp_session_v2";
@@ -559,3 +559,4 @@ window.patrolStart = patrolStart;
 window.patrolStop = patrolStop;
 window.patrolEvent = patrolEvent;
 window.patrolNote = patrolNote;
+
