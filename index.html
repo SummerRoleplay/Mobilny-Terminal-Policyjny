@@ -32,7 +32,6 @@
       </div>
     </div>
 
-    <!-- PANEL GŁÓWNY -->
     <div class="card">
       <div class="card-inner">
         <div class="card-title">
@@ -75,7 +74,7 @@
           </a>
         </div>
 
-        <!-- ZARZĄD -->
+        <!-- ZARZĄD (tylko dla: Nowacki, Nowak, Bielik, Trok, Zieliński) -->
         <div id="zarzadLinks" style="display:none; margin-top:14px;">
           <div class="hr"></div>
           <div class="card-title" style="margin-bottom:10px;">
@@ -129,78 +128,6 @@
 
       </div>
     </div>
-
-    <!-- TRYB PATROLU -->
-    <div class="card" id="patrolModeBox" style="margin-top:16px;">
-      <div class="card-inner">
-        <div class="card-title">
-          <h2>Tryb patrolu</h2>
-          <small>Start/Stop + szybkie zdarzenia</small>
-        </div>
-        <div class="hr"></div>
-
-        <div class="patrol-grid">
-          <div>
-            <label>Skład patrolu (partner / partnerzy)</label>
-            <input id="patrolPartner" placeholder="np. 480000 — Post. — Adam Nowak, 48000 — St. Post. — Jan Kowalski">
-          </div>
-
-          <div>
-            <label>Znak patrolu (call sign)</label>
-            <input id="patrolCallsign" placeholder="np. 21">
-          </div>
-
-          <div class="full">
-            <label>Rejon / sektor</label>
-            <input id="patrolArea" placeholder="np. Gdańsk Śródmieście / Obwodnica / Port">
-          </div>
-
-          <div class="patrol-status full">
-            <div class="patrol-left">
-              <div class="pill" id="patrolStatePill">NIEAKTYWNY</div>
-              <div class="patrol-meta">
-                <div><span class="muted">Patrol ID:</span> <b id="patrolIdText">—</b></div>
-                <div><span class="muted">Czas:</span> <b id="patrolTimeText">00:00:00</b></div>
-              </div>
-            </div>
-
-            <div class="patrol-actions">
-              <button class="btn btn-primary" type="button" onclick="patrolStart()">
-                <span class="meta"><strong>Start</strong><span>Rozpocznij służbę</span></span><span class="chev">▶</span>
-              </button>
-              <button class="btn btn-ghost" type="button" onclick="patrolStop()">
-                <span class="meta"><strong>Stop</strong><span>Zakończ służbę</span></span><span class="chev">■</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="full">
-            <div class="patrol-quick">
-              <button class="btn" type="button" onclick="patrolEvent('Kontrola drogowa')">
-                <span class="meta"><strong>Kontrola</strong><span>traffic stop</span></span><span class="chev">→</span>
-              </button>
-              <button class="btn" type="button" onclick="patrolEvent('Interwencja')">
-                <span class="meta"><strong>Interwencja</strong><span>zgłoszenie</span></span><span class="chev">→</span>
-              </button>
-              <button class="btn" type="button" onclick="patrolEvent('Pościg')">
-                <span class="meta"><strong>Pościg</strong><span>pursuit</span></span><span class="chev">→</span>
-              </button>
-              <button class="btn" type="button" onclick="patrolEvent('Zatrzymanie')">
-                <span class="meta"><strong>Zatrzymanie</strong><span>detention</span></span><span class="chev">→</span>
-              </button>
-              <button class="btn btn-primary" type="button" onclick="patrolNote()">
-                <span class="meta"><strong>Notatka</strong><span>krótka informacja</span></span><span class="chev">✎</span>
-              </button>
-            </div>
-
-            <div id="patrolStatus" class="status">—</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-    <!-- /TRYB PATROLU -->
-
   </div>
 
   <!-- PIN GATE -->
@@ -208,13 +135,13 @@
     <div class="lock-panel">
       <div class="lock-head">
         <h3>Autoryzacja dostępu — MTP</h3>
-        <p>KWP GDAŃSK · Wymagany numer legitymacji i PIN</p>
+        <p>KWP GDAŃSK · Wymagany identyfikator i PIN</p>
       </div>
 
       <div class="lock-body">
         <div>
-          <label for="officerIdInput">Numer legitymacji</label>
-          <input id="officerIdInput" type="text" inputmode="numeric" placeholder="np. 480000" maxlength="12" autocomplete="off">
+          <label for="officerSelect">Funkcjonariusz</label>
+          <select id="officerSelect"></select>
         </div>
 
         <div>
