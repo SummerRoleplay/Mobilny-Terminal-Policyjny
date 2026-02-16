@@ -1,13 +1,14 @@
 // ===============================
-// WEBHOOKI
+// MTP — app.js (FULL UPDATED)
+// ===============================
+
+// ===============================
+// WEBHOOKI (WSTAW SWOJE!)
 // ===============================
 const webhookMandat      = "https://discord.com/api/webhooks/1403683432227410001/aSOQ2awWpU5bBgGsgo1E0k_kkBIGU6bwOUEBsuSXgaVc-vp3-cmAlIWk5wHSkkdLheNg";
 const webhookSadDecyzja  = "https://discord.com/api/webhooks/1400235543039840276/eORj9cfyFdBNHEmRavXYoXszjo9fO_NkSV4zP1AJkRmTn5OAxYocKL1q3zkd6Bb50jVc";
 const webhookWniosekSad  = "https://discord.com/api/webhooks/1400235543039840276/eORj9cfyFdBNHEmRavXYoXszjo9fO_NkSV4zP1AJkRmTn5OAxYocKL1q3zkd6Bb50jVc";
 const webhookRaport      = "https://discord.com/api/webhooks/1400235543039840276/eORj9cfyFdBNHEmRavXYoXszjo9fO_NkSV4zP1AJkRmTn5OAxYocKL1q3zkd6Bb50jVc";
-
-// PATROLE MODE
-const webhookPatrol = "https://discord.com/api/webhooks/1472388815510442110/k_cnN7d0XWEXEuRaFVqKAklUXfb_o2oxiRFWYzzxJ9Enmz4heKLyadeME-dKQ4NA3Fwb";
 
 // ZARZĄD
 const webhookAdaptacja   = "https://discord.com/api/webhooks/1453899121382653962/2-pKVCsfszoPdDoaIEIJRw9Zy8QtdDijF_kPDh4ZvYd5mUQLnd4gxbyaXPEFBXuEnJJD";
@@ -18,10 +19,10 @@ const webhookZwolnienia  = "https://discord.com/api/webhooks/1471980589597851859
 
 
 // ===============================
-// FUNKCJONARIUSZE
+// FUNKCJONARIUSZE — NOWE ID + RANGI
+// isBoard: true tylko dla zarządu
 // ===============================
 const OFFICERS = [
-  { id: "01", name: "Admin",   rank: "ALL",          pin: "6745", isBoard: true },
   { id: "480101", name: "Michał Nowacki",   rank: "Inspektor",          pin: "4827", isBoard: true },
   { id: "480202", name: "Michał Zieliński", rank: "Młodszy Inspektor",  pin: "9042", isBoard: true },
   { id: "480303", name: "Anna Nowak",       rank: "Podinspektor",       pin: "0711", isBoard: true },
@@ -98,16 +99,24 @@ function setSession(officer){
 
 function clearSession(){ localStorage.removeItem(SESSION_KEY); }
 
+function buildOfficerSelect(){
+  const sel = $("officerSelect");
+  if(!sel) return;
+
+  sel.innerHTML =
+    `<option value="" disabled selected>Wybierz funkcjonariusza...</option>` +
+    OFFICERS.map(o =>
+      `<option value="${o.id}">${o.id} — ${o.rank} — ${o.name}</option>`
+    ).join("");
+}
+
 function showGate(){
   const lock = $("lock");
   if(!lock) return;
+  buildOfficerSelect();
   lock.classList.add("show");
-
-  if($("officerIdInput")) $("officerIdInput").value = "";
   if($("pinInput")) $("pinInput").value = "";
-
-  setStatus("statusGate","Wpisz numer legitymacji i PIN.", null);
-  setTimeout(()=> $("officerIdInput")?.focus(), 50);
+  setStatus("statusGate","Wprowadź ID i PIN.", null);
 }
 
 function hideGate(){
@@ -171,34 +180,19 @@ function autofillOfficer(){
 }
 
 function handleLogin(){
-  const officerId = ($("officerIdInput")?.value || "").trim();
+  const officerId = $("officerSelect")?.value;
   const pin = ($("pinInput")?.value || "").trim();
-
-  if(!officerId){
-    setStatus("statusGate","Wpisz numer legitymacji.", false);
-    return;
-  }
-  if(pin.length < 4){
-    setStatus("statusGate","PIN za krótki.", false);
-    return;
-  }
-
   const officer = OFFICERS.find(o => o.id === officerId);
-  if(!officer){
-    setStatus("statusGate","Nie znaleziono funkcjonariusza o takim numerze.", false);
-    return;
-  }
-  if(pin !== officer.pin){
-    setStatus("statusGate","Niepoprawny PIN.", false);
-    return;
-  }
+
+  if(!officer) return setStatus("statusGate","Wybierz funkcjonariusza.", false);
+  if(pin.length < 4) return setStatus("statusGate","PIN za krótki.", false);
+  if(pin !== officer.pin) return setStatus("statusGate","Niepoprawny PIN.", false);
 
   setSession(officer);
   hideGate();
   updateSessionBadge();
   autofillOfficer();
   updateBoardVisibility();
-  patrolUI();
 }
 
 function handleLogout(){
@@ -237,11 +231,12 @@ async function wyslijWebhook(url, embed, content=null){
   }
 
   embed = sanitizeEmbed(embed);
-  const payload = content ? { content, embeds:[embed] } : { embeds: [embed] };
+  const payload = content ? { content, embeds:[embed] } : { embeds:[embed] };
 
   const body = new URLSearchParams();
   body.set("payload_json", JSON.stringify(payload));
 
+  // opaque response, ale request poleci
   await fetch(url, { method:"POST", body, mode:"no-cors" });
 }
 
@@ -282,6 +277,10 @@ function toggleRaportType(){
   interw.style.display = type === "interwencja" ? "block" : "none";
 }
 
+
+// ===============================
+// ZARZĄD — widoczność w index.html
+// ===============================
 function updateBoardVisibility(){
   const box = $("zarzadLinks");
   if(!box) return;
@@ -293,11 +292,11 @@ function updateBoardVisibility(){
 // INIT
 // ===============================
 document.addEventListener("DOMContentLoaded", ()=>{
+  buildOfficerSelect();
+
   $("loginBtn")?.addEventListener("click", handleLogin);
   $("logoutBtn")?.addEventListener("click", handleLogout);
-
   $("pinInput")?.addEventListener("keydown", (e)=>{ if(e.key==="Enter") handleLogin(); });
-  $("officerIdInput")?.addEventListener("keydown", (e)=>{ if(e.key==="Enter") handleLogin(); });
 
   requireGate();
   updateSessionBadge();
@@ -308,255 +307,416 @@ document.addEventListener("DOMContentLoaded", ()=>{
   toggleWniosekType();
   toggleRaportType();
 
+  // jeśli to strona zarządu, zablokuj wejście
   if(document.body?.dataset?.board === "true"){
     requireBoard();
   }
 
-  patrolUI();
+  // =========================
+  // MANDAT
+  // =========================
+  const mandatForm = $("mandatForm");
+  if(mandatForm){
+    mandatForm.addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      if(!requireGate()) return;
+
+      setStatus("statusMandat","Wysyłam mandat…",null);
+
+      try{
+        const imie = clamp($("imie")?.value, 128);
+        const nick = clamp($("nick")?.value, 128);
+        const dataWyst = $("dataWystawienia")?.value;
+        const godzZdarz = $("godzinaZdarzenia")?.value || "—";
+        const miejsce = clamp($("miejsce")?.value, 256);
+
+        const przycz = $("przyczyna")?.value || "";
+        const art = $("innePrzyczyna")?.value?.trim() || "";
+        if(!art){
+          setStatus("statusMandat","Wpisz artykuł (wymagane).",false);
+          return;
+        }
+        const przyczynaFinal = (przycz === "inne" || !przycz) ? art : `${przycz} — (${art})`;
+
+        const kwota = Number($("kwota")?.value || 0);
+        const punkty = Number($("punkty")?.value || 0);
+        const pojazd = clamp($("pojazd")?.value, 256);
+        const funkc = clamp($("funkcjonariusz")?.value || "", 256);
+
+        const d = new Date(dataWyst);
+        const dataStr = isNaN(d) ? "—" : (d.toLocaleDateString("pl-PL") + ", " + d.toLocaleTimeString("pl-PL",{hour:"2-digit",minute:"2-digit"}));
+
+        const embed = {
+          title: "💸 MANDAT KARNY — MTP",
+          description: "**Komenda Wojewódzka Policji w Gdańsku – Summer RP**",
+          color: 0xdc143c,
+          fields: [
+            { name:"Dane osoby ukaranej", value:`> Imię i nazwisko: **${imie}**\n> Nick (OOC): ${nick}` },
+            { name:"Informacje o zdarzeniu", value:`> Data wystawienia: **${dataStr}**\n> Godzina zdarzenia: **${godzZdarz}**\n> Miejsce: **${miejsce}**` },
+            { name:"Przyczyna", value:`> **${clamp(przyczynaFinal, 900)}**` },
+            { name:"Wymiar kary", value:`> Kwota: **${Number.isFinite(kwota) ? kwota.toLocaleString() : "—"} PLN**\n> Punkty: **${Number.isFinite(punkty) ? punkty : "—"} pkt**` },
+            { name:"Pojazd", value:`> ${pojazd}` },
+            { name:"Funkcjonariusz", value:`> **${funkc}**` }
+          ],
+          footer:{ text:"KWP GDAŃSK — MTP • Summer RP" }
+        };
+
+        await wyslijWebhook(webhookMandat, embed);
+        setStatus("statusMandat","Mandat wysłany. Sprawdź kanał.",true);
+
+        mandatForm.reset();
+        pokazPoleArtykulu();
+        autofillOfficer();
+      }catch(err){
+        setStatus("statusMandat","Błąd: " + (err.message || String(err)),false);
+        console.error(err);
+      }
+    });
+  }
+
+  // =========================
+  // WNIOSEK
+  // =========================
+  const wniosekForm = $("wniosekForm");
+  if(wniosekForm){
+    wniosekForm.addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      if(!requireGate()) return;
+
+      setStatus("statusWniosek","Wysyłam wniosek…",null);
+
+      try{
+        const ukarany = clamp($("ukarany")?.value, 128);
+        const nick = clamp($("nickWniosek")?.value, 128);
+        const typ = $("typWniosku")?.value || "odmowa";
+
+        let embed;
+
+        if(typ === "odmowa"){
+          const dataMandatu = $("dataMandatu")?.value || "—";
+          const typMandatu = clamp($("typMandatu")?.value, 128);
+          const kwotaMandatu = $("kwotaMandatu")?.value ? Number($("kwotaMandatu").value) : null;
+          const powod = $("powodOdmowa")?.value?.trim() || "";
+          if(!powod){
+            setStatus("statusWniosek","Opisz powód odmowy (wymagane).",false);
+            return;
+          }
+
+          embed = {
+            title: "📜 WNIOSEK DO SĄDU — ODMOWA MANDATU — MTP",
+            description: "**Komenda Wojewódzka Policji w Gdańsku – Summer RP**",
+            color: 0x3b82f6,
+            fields: [
+              { name:"Dane osoby", value:`> **${ukarany}**\n> Nick: ${nick}` },
+              { name:"Mandat", value:`> Data: **${dataMandatu}**\n> Typ: **${typMandatu}**\n> Kwota: **${kwotaMandatu==null || Number.isNaN(kwotaMandatu) ? "—" : kwotaMandatu.toLocaleString()+" PLN"}**` },
+              { name:"Powód odmowy", value:`> ${clamp(powod, 900)}` }
+            ],
+            footer:{ text:"KWP GDAŃSK — MTP • Summer RP" }
+          };
+        }else{
+          const dataCzas = $("dataCzasZdarzeniaSad")?.value;
+          const dataCzasStr = dataCzas ? new Date(dataCzas).toLocaleString("pl-PL") : "—";
+          const miejsce = clamp($("miejsceSad")?.value, 256);
+          const kwal = clamp($("kwalifikacjaSad")?.value, 900);
+          const opis = $("opisSad")?.value?.trim() || "";
+          const dowody = clamp($("dowodySad")?.value, 900);
+
+          if(!opis){
+            setStatus("statusWniosek","Opis sprawy jest wymagany.",false);
+            return;
+          }
+
+          embed = {
+            title: "📜 WNIOSEK DO SĄDU — SPRAWA PRZEKAZANA — MTP",
+            description: "**Komenda Wojewódzka Policji w Gdańsku – Summer RP**",
+            color: 0x3b82f6,
+            fields: [
+              { name:"Strona", value:`> **${ukarany}**\n> Nick: ${nick}` },
+              { name:"Zdarzenie", value:`> Czas: **${dataCzasStr}**\n> Miejsce: **${miejsce}**` },
+              { name:"Kwalifikacja", value:`> ${kwal}` },
+              { name:"Opis", value:`> ${clamp(opis, 900)}` },
+              { name:"Dowody", value:`> ${dowody}` }
+            ],
+            footer:{ text:"KWP GDAŃSK — MTP • Summer RP" }
+          };
+        }
+
+        let ok1=false, ok2=false;
+        try{ await wyslijWebhook(webhookWniosekSad, embed); ok1=true; }catch(e1){ console.warn(e1); }
+        try{ await wyslijWebhook(webhookSadDecyzja, embed); ok2=true; }catch(e2){ console.warn(e2); }
+
+        if(ok1 || ok2){
+          setStatus("statusWniosek","Wniosek wysłany.",true);
+          wniosekForm.reset();
+          toggleWniosekType();
+        }else{
+          setStatus("statusWniosek","Nie poszło na żaden webhook (sprawdź URL).",false);
+        }
+
+      }catch(err){
+        setStatus("statusWniosek","Błąd: " + (err.message || String(err)),false);
+        console.error(err);
+      }
+    });
+  }
+
+  // =========================
+  // ZARZĄD — formularze (podstrony)
+  // =========================
+  wireBoardForm("adaptacjaForm", "statusAdaptacja", webhookAdaptacja, () => ({
+    title: "🧪 WYNIK ADAPTACJI — ZARZĄD MTP",
+    color: 0x4aa3ff,
+    fields: [
+      { name:"Funkcjonariusz (kandydat)", value: clamp($("candName")?.value, 256) },
+      { name:"ID", value: clamp($("candId")?.value, 64) },
+      { name:"Okres adaptacji", value: clamp($("adaptPeriod")?.value, 128) },
+      { name:"Wynik", value: clamp($("adaptResult")?.value, 128) },
+      { name:"Ocena / komentarz", value: clamp($("adaptComment")?.value, 900) },
+      { name:"Decyzja", value: clamp($("adaptDecision")?.value, 128) },
+      { name:"Autor (ZARZĄD)", value: clamp($("autorBoard")?.value, 256) }
+    ]
+  }));
+
+  wireBoardForm("naganyForm", "statusNagany", webhookNagany, () => ({
+    title: "⛔ NAGANA / DYSCYPLINA — ZARZĄD MTP",
+    color: 0xff4d4d,
+    fields: [
+      { name:"Funkcjonariusz", value: clamp($("targetName")?.value, 256) },
+      { name:"ID", value: clamp($("targetId")?.value, 64) },
+      { name:"Powód", value: clamp($("reason")?.value, 900) },
+      { name:"Kara / środek", value: clamp($("penalty")?.value, 256) },
+      { name:"Dowody / linki", value: clamp($("evidence")?.value, 900) },
+      { name:"Autor (ZARZĄD)", value: clamp($("autorBoard")?.value, 256) }
+    ]
+  }));
+
+  wireBoardForm("pochwalyForm", "statusPochwaly", webhookPochwaly, () => ({
+    title: "✅ POCHWAŁA / WYRÓŻNIENIE — ZARZĄD MTP",
+    color: 0x2ecc71,
+    fields: [
+      { name:"Funkcjonariusz", value: clamp($("pName")?.value, 256) },
+      { name:"ID", value: clamp($("pId")?.value, 64) },
+      { name:"Za co", value: clamp($("pFor")?.value, 900) },
+      { name:"Forma wyróżnienia", value: clamp($("pType")?.value, 256) },
+      { name:"Autor (ZARZĄD)", value: clamp($("autorBoard")?.value, 256) }
+    ]
+  }));
+
+  wireBoardForm("awanseForm", "statusAwanse", webhookAwanse, () => ({
+    title: "⬆️ AWANS / ZMIANA STOPNIA — ZARZĄD MTP",
+    color: 0xf1c40f,
+    fields: [
+      { name:"Funkcjonariusz", value: clamp($("aName")?.value, 256) },
+      { name:"ID", value: clamp($("aId")?.value, 64) },
+      { name:"Z", value: clamp($("aFrom")?.value, 128) },
+      { name:"Na", value: clamp($("aTo")?.value, 128) },
+      { name:"Uzasadnienie", value: clamp($("aWhy")?.value, 900) },
+      { name:"Data wejścia", value: clamp($("aDate")?.value, 128) },
+      { name:"Autor (ZARZĄD)", value: clamp($("autorBoard")?.value, 256) }
+    ]
+  }));
+
+  wireBoardForm("zwolnieniaForm", "statusZwolnienia", webhookZwolnienia, () => ({
+    title: "🧾 ZWOLNIENIE / USUNIĘCIE ZE SŁUŻBY — ZARZĄD MTP",
+    color: 0x9b59b6,
+    fields: [
+      { name:"Funkcjonariusz", value: clamp($("zName")?.value, 256) },
+      { name:"ID", value: clamp($("zId")?.value, 64) },
+      { name:"Powód", value: clamp($("zReason")?.value, 900) },
+      { name:"Data", value: clamp($("zDate")?.value, 128) },
+      { name:"Uwagi / dalsze kroki", value: clamp($("zNotes")?.value, 900) },
+      { name:"Autor (ZARZĄD)", value: clamp($("autorBoard")?.value, 256) }
+    ]
+  }));
 });
 
 
 // ===============================
-// TRYB PATROLU — TYLKO webhookPatrol
+// ZARZĄD — helper
 // ===============================
-const PATROL_KEY = "mtp_patrol_state_v1";
-let patrolTimer = null;
+function wireBoardForm(formId, statusId, webhookUrl, buildEmbedFn){
+  const form = $(formId);
+  if(!form) return;
 
-function patrolLoad(){
-  try{ return JSON.parse(localStorage.getItem(PATROL_KEY) || "null"); }
-  catch{ return null; }
-}
-function patrolSave(state){ localStorage.setItem(PATROL_KEY, JSON.stringify(state)); }
-function patrolClear(){ localStorage.removeItem(PATROL_KEY); }
+  form.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    if(!requireBoard()) return;
 
-function pad2(n){ return String(n).padStart(2,"0"); }
-function fmtHMS(ms){
-  const total = Math.max(0, Math.floor(ms/1000));
-  const h = Math.floor(total/3600);
-  const m = Math.floor((total%3600)/60);
-  const s = total%60;
-  return `${pad2(h)}:${pad2(m)}:${pad2(s)}`;
-}
-function genPatrolId(){
-  const d = new Date();
-  const y = d.getFullYear();
-  const mo = pad2(d.getMonth()+1);
-  const da = pad2(d.getDate());
-  const rnd = Math.floor(1000 + Math.random()*9000);
-  return `MTP-PATROL-${y}${mo}${da}-${rnd}`;
-}
+    setStatus(statusId, "Wysyłam…", null);
 
-function patrolUI(){
-  const box = $("patrolModeBox");
-  if(!box) return;
+    try{
+      const s = getSession();
+      const base = buildEmbedFn();
 
-  const pill = $("patrolStatePill");
-  const idText = $("patrolIdText");
-  const timeText = $("patrolTimeText");
+      const embed = {
+        ...base,
+        description: "**KWP GDAŃSK — Panel Zarządu (MTP)**",
+        footer: { text: "KWP GDAŃSK — ZARZĄD MTP" },
+        timestamp: nowISO()
+      };
 
-  const st = patrolLoad();
-  const active = !!(st && st.active);
+      await wyslijWebhook(webhookUrl, embed, `**ZARZĄD MTP** · ${s.officerId} — ${s.officerRank} — ${s.officerName}`);
+      setStatus(statusId, "Wysłano.", true);
 
-  if(pill){
-    pill.textContent = active ? "AKTYWNY" : "NIEAKTYWNY";
-    pill.classList.toggle("on", active);
-  }
-  if(idText) idText.textContent = st?.patrolId || "—";
-  if(timeText){
-    timeText.textContent = active && st.startedAt ? fmtHMS(Date.now() - st.startedAt) : "00:00:00";
-  }
-
-  if(active){
-    if(!patrolTimer) patrolTimer = setInterval(patrolUI, 1000);
-  }else{
-    if(patrolTimer){ clearInterval(patrolTimer); patrolTimer = null; }
-  }
+      form.reset();
+      autofillOfficer();
+    }catch(err){
+      setStatus(statusId, "Błąd: " + (err.message || String(err)), false);
+      console.error(err);
+    }
+  });
 }
 
-async function patrolStart(){
-  const s = requireGate();
-  if(!s) return;
 
-  const existing = patrolLoad();
-  if(existing?.active){
-    setStatus("patrolStatus", "Patrol już jest aktywny.", false);
-    patrolUI();
-    return;
-  }
-
-  const partner = $("patrolPartner")?.value?.trim() || "—";
-  const callsign = $("patrolCallsign")?.value?.trim() || "—";
-  const area = $("patrolArea")?.value?.trim() || "—";
-  const officer = `${s.officerId} — ${s.officerRank} — ${s.officerName}`;
-
-  const state = {
-    active: true,
-    patrolId: genPatrolId(),
-    startedAt: Date.now(),
-    officer,
-    partner,
-    callsign,
-    area
-  };
-  patrolSave(state);
-  patrolUI();
+// ===============================
+// RAPORTY / ZATRZYMANIE (dla onclick)
+// ===============================
+async function sendPatrolReport(){
+  if(!requireGate()) return;
 
   try{
-    setStatus("patrolStatus", "Start patrolu… wysyłam log.", null);
+    setStatus("statusRaportPatrol","Wysyłam raport patrolu…",null);
+
+    const dataSluzby = $("dataSluzby")?.value || "—";
+    const czasTrwania = $("czasTrwania")?.value || "—";
+    const sklad = $("skladPatrolu")?.value?.trim() || "—";
+    const obszar = $("obszarPatrolu")?.value?.trim() || "—";
+    const czynnosci = $("czynnosciPatrolu")?.value?.trim() || "—";
+    const incydenty = $("incydentyPatrolu")?.value?.trim() || "Brak";
+    const uwagi = $("uwagiPatrolu")?.value?.trim() || "—";
+    const sporadzil = $("sporadzilPatrol")?.value?.trim() || "—";
+    const dataSporz = $("dataSporzadzeniaPatrol")?.value || new Date().toLocaleDateString("pl-PL");
 
     const embed = {
-      title: "🟢 START PATROLU — MTP",
-      description: "**Komenda Wojewódzka Policji w Gdańsku – Summer RP**",
+      title:"📋 RAPORT ZE SŁUŻBY / PATROLU — MTP",
+      description:"**Komenda Wojewódzka Policji w Gdańsku – Summer RP**",
       color: 0x2ecc71,
-      fields: [
-        { name:"Patrol ID", value: state.patrolId, inline:true },
-        { name:"Znak patrolu", value: state.callsign, inline:true },
-        { name:"Funkcjonariusz", value: state.officer },
-        { name:"Partner / skład", value: state.partner },
-        { name:"Rejon / sektor", value: state.area }
+      fields:[
+        { name:"Data służby", value:dataSluzby, inline:true },
+        { name:"Czas trwania", value:czasTrwania, inline:true },
+        { name:"Skład patrolu", value:escQuote(sklad) },
+        { name:"Obszar patrolu", value:clamp(obszar,900) },
+        { name:"Czynności", value:clamp(escList(czynnosci),900) },
+        { name:"Incydenty", value:clamp(incydenty,900) },
+        { name:"Uwagi", value:clamp(uwagi,900) },
+        { name:"Sporządził", value:clamp(sporadzil,256) },
+        { name:"Data sporządzenia", value:dataSporz }
       ],
-      footer: { text: "KWP GDAŃSK — MTP • Summer RP" },
-      timestamp: nowISO()
+      footer:{ text:"KWP GDAŃSK — MTP • Summer RP" }
     };
 
-    await wyslijWebhook(webhookPatrol, embed, "**MTP: Start patrolu**");
-    setStatus("patrolStatus", "Patrol uruchomiony i zalogowany.", true);
+    await wyslijWebhook(webhookRaport, embed, "**Nowy raport patrolu (MTP)**");
+    setStatus("statusRaportPatrol","Raport patrolu wysłany.",true);
   }catch(err){
-    setStatus("patrolStatus", "Patrol uruchomiony, ale nie wysłało logu.", false);
+    setStatus("statusRaportPatrol","Błąd: " + (err.message || String(err)),false);
     console.error(err);
   }
 }
 
-async function patrolStop(){
-  const s = requireGate();
-  if(!s) return;
-
-  const st = patrolLoad();
-  if(!st?.active){
-    setStatus("patrolStatus", "Nie ma aktywnego patrolu.", false);
-    patrolUI();
-    return;
-  }
-
-  const duration = fmtHMS(Date.now() - st.startedAt);
+async function sendInterwReport(){
+  if(!requireGate()) return;
 
   try{
-    setStatus("patrolStatus", "Stop patrolu… wysyłam log.", null);
+    setStatus("statusRaportInterw","Wysyłam raport interwencji…",null);
+
+    const dataCzas = $("dataCzasInterw")?.value;
+    const dataCzasStr = dataCzas ? new Date(dataCzas).toLocaleString("pl-PL") : "—";
+    const miejsce = $("miejsceInterw")?.value?.trim() || "—";
+    const zgloszenie = $("zgloszenieInterw")?.value?.trim() || "—";
+    const funkcjonariusze = $("funkcjonariuszeInterw")?.value?.trim() || "—";
+    const opis = $("opisInterw")?.value?.trim() || "—";
+    const zatrzymane = $("zatrzymaneOsoby")?.value?.trim() || "Brak";
+    const dowody = $("dowodyInterw")?.value?.trim() || "Brak";
+    const uwagi = $("uwagiInterw")?.value?.trim() || "—";
+    const sporadzil = $("sporadzilInterw")?.value?.trim() || "—";
+    const dataSporz = $("dataSporzadzeniaInterw")?.value || new Date().toLocaleDateString("pl-PL");
 
     const embed = {
-      title: "🔴 STOP PATROLU — MTP",
-      description: "**Komenda Wojewódzka Policji w Gdańsku – Summer RP**",
-      color: 0xff4d4d,
-      fields: [
-        { name:"Patrol ID", value: st.patrolId, inline:true },
-        { name:"Czas służby", value: duration, inline:true },
-        { name:"Znak patrolu", value: st.callsign || "—" },
-        { name:"Funkcjonariusz", value: st.officer || "—" },
-        { name:"Partner / skład", value: st.partner || "—" },
-        { name:"Rejon / sektor", value: st.area || "—" }
-      ],
-      footer: { text: "KWP GDAŃSK — MTP • Summer RP" },
-      timestamp: nowISO()
-    };
-
-    await wyslijWebhook(webhookPatrol, embed, "**MTP: Stop patrolu**");
-    setStatus("patrolStatus", "Patrol zakończony i zalogowany.", true);
-  }catch(err){
-    setStatus("patrolStatus", "Zakończono patrol, ale nie wysłało logu.", false);
-    console.error(err);
-  }finally{
-    patrolClear();
-    patrolUI();
-  }
-}
-
-async function patrolEvent(type){
-  const s = requireGate();
-  if(!s) return;
-
-  const st = patrolLoad();
-  if(!st?.active){
-    setStatus("patrolStatus", "Najpierw uruchom START patrolu.", false);
-    return;
-  }
-
-  const note = prompt(`Szczegóły zdarzenia: ${type}\n(krótko — opcjonalnie)`) || "—";
-  const elapsed = fmtHMS(Date.now() - st.startedAt);
-
-  try{
-    setStatus("patrolStatus", `Wysyłam: ${type}…`, null);
-
-    const embed = {
-      title: `📌 ZDARZENIE PATROLU — ${type.toUpperCase()}`,
-      description: "**Komenda Wojewódzka Policji w Gdańsku – Summer RP**",
-      color: 0x4aa3ff,
-      fields: [
-        { name:"Patrol ID", value: st.patrolId, inline:true },
-        { name:"Czas od startu", value: elapsed, inline:true },
-        { name:"Znak patrolu", value: st.callsign || "—" },
-        { name:"Rejon", value: st.area || "—" },
-        { name:"Funkcjonariusz", value: st.officer || "—" },
-        { name:"Partner / skład", value: st.partner || "—" },
-        { name:"Szczegóły", value: clamp(note, 900) }
-      ],
-      footer: { text: "KWP GDAŃSK — MTP • Summer RP" },
-      timestamp: nowISO()
-    };
-
-    await wyslijWebhook(webhookPatrol, embed, `**MTP: Zdarzenie patrolu — ${type}**`);
-    setStatus("patrolStatus", `Wysłano zdarzenie: ${type}`, true);
-  }catch(err){
-    setStatus("patrolStatus", "Błąd wysyłki.", false);
-    console.error(err);
-  }
-}
-
-async function patrolNote(){
-  const s = requireGate();
-  if(!s) return;
-
-  const st = patrolLoad();
-  if(!st?.active){
-    setStatus("patrolStatus", "Najpierw uruchom START patrolu.", false);
-    return;
-  }
-
-  const text = prompt("Notatka patrolowa (krótko):");
-  if(!text) return;
-
-  const elapsed = fmtHMS(Date.now() - st.startedAt);
-
-  try{
-    setStatus("patrolStatus", "Wysyłam notatkę…", null);
-
-    const embed = {
-      title: "📝 NOTATKA PATROLU — MTP",
-      description: "**Komenda Wojewódzka Policji w Gdańsku – Summer RP**",
+      title:"📄 RAPORT Z INTERWENCJI — MTP",
+      description:"**Komenda Wojewódzka Policji w Gdańsku – Summer RP**",
       color: 0xf1c40f,
-      fields: [
-        { name:"Patrol ID", value: st.patrolId, inline:true },
-        { name:"Czas od startu", value: elapsed, inline:true },
-        { name:"Znak patrolu", value: st.callsign || "—" },
-        { name:"Rejon", value: st.area || "—" },
-        { name:"Funkcjonariusz", value: st.officer || "—" },
-        { name:"Partner / skład", value: st.partner || "—" },
-        { name:"Notatka", value: clamp(text, 900) }
+      fields:[
+        { name:"Data i godzina", value:dataCzasStr },
+        { name:"Miejsce", value:clamp(miejsce,900) },
+        { name:"Zgłoszenie", value:clamp(zgloszenie,900) },
+        { name:"Funkcjonariusze", value:escQuote(funkcjonariusze) },
+        { name:"Opis", value:clamp(opis,900) },
+        { name:"Zatrzymane osoby", value:clamp(zatrzymane,900) },
+        { name:"Dowody", value:clamp(escList(dowody),900) },
+        { name:"Uwagi", value:clamp(uwagi,900) },
+        { name:"Sporządził", value:clamp(sporadzil,256) },
+        { name:"Data sporządzenia", value:dataSporz }
       ],
-      footer: { text: "KWP GDAŃSK — MTP • Summer RP" },
-      timestamp: nowISO()
+      footer:{ text:"KWP GDAŃSK — MTP • Summer RP" }
     };
 
-    await wyslijWebhook(webhookPatrol, embed, "**MTP: Notatka patrolu**");
-    setStatus("patrolStatus", "Notatka wysłana.", true);
+    await wyslijWebhook(webhookRaport, embed, "**Nowy raport interwencji (MTP)**");
+    setStatus("statusRaportInterw","Raport interwencji wysłany.",true);
   }catch(err){
-    setStatus("patrolStatus", "Błąd wysyłki.", false);
+    setStatus("statusRaportInterw","Błąd: " + (err.message || String(err)),false);
     console.error(err);
   }
 }
 
-// expose patrol functions
-window.patrolStart = patrolStart;
-window.patrolStop = patrolStop;
-window.patrolEvent = patrolEvent;
-window.patrolNote = patrolNote;
+async function sendZatrzymanieProtocol(){
+  if(!requireGate()) return;
 
+  try{
+    setStatus("statusZatrzymanie","Wysyłam protokół…",null);
+
+    const dataCzas = $("dataCzasZatrzymania")?.value;
+    const dataStr = dataCzas ? new Date(dataCzas).toLocaleString("pl-PL") : "—";
+
+    const funkcjonariusz = $("funkcjonariuszZatrzymanie")?.value?.trim() || "—";
+    const nickFunc = $("nickFuncZatrzymanie")?.value?.trim() || "—";
+    const osoba = $("osobaZatrzymanaIC")?.value?.trim() || "—";
+    const idDowod = $("idDowodZatrzymanie")?.value?.trim() || "—";
+    const miejsce = $("miejsceZatrzymania")?.value?.trim() || "—";
+    const powod = $("powodZatrzymania")?.value?.trim() || "—";
+    const zabezp = $("zabezpieczonePrzedmioty")?.value?.trim() || "Brak";
+    const czasTrw = $("czasTrwaniaZatrzymania")?.value?.trim() || "—";
+    const uwagi = $("uwagiZatrzymanie")?.value?.trim() || "Brak";
+    const dataSporz = $("dataSporzadzeniaZatrzymania")?.value || new Date().toLocaleDateString("pl-PL");
+
+    if(!dataCzas || !funkcjonariusz || !nickFunc || !osoba || !miejsce || !powod){
+      setStatus("statusZatrzymanie","Uzupełnij wymagane pola (*).",false);
+      return;
+    }
+
+    const embed = {
+      title:"🚨 PROTOKÓŁ ZATRZYMANIA — MTP",
+      description:"**Komenda Wojewódzka Policji w Gdańsku – Summer RP**",
+      color: 0xe74c3c,
+      fields:[
+        { name:"Data i godzina zatrzymania", value:`**${dataStr}**` },
+        { name:"Funkcjonariusz", value:`> **${clamp(funkcjonariusz,256)}**\n> Nick OOC: ${clamp(nickFunc,128)}` },
+        { name:"Zatrzymany", value:`> **${clamp(osoba,128)}**\n> ID/Dowód: ${clamp(idDowod,128)}` },
+        { name:"Miejsce", value:clamp(miejsce,900) },
+        { name:"Powód", value:clamp(powod,900) },
+        { name:"Zabezpieczone przedmioty", value:clamp(escList(zabezp),900) },
+        { name:"Czas trwania", value:clamp(czasTrw,128) },
+        { name:"Uwagi", value:clamp(uwagi,900) },
+        { name:"Podpis (IC)", value:`**${clamp(funkcjonariusz,256)}**\nData: **${dataSporz}**` }
+      ],
+      footer:{ text:"KWP GDAŃSK — MTP • Summer RP" }
+    };
+
+    await wyslijWebhook(webhookRaport, embed, "**Nowy protokół zatrzymania (MTP)**");
+    setStatus("statusZatrzymanie","Protokół wysłany.",true);
+
+    $("zatrzymanieForm")?.reset();
+    autofillOfficer();
+  }catch(err){
+    setStatus("statusZatrzymanie","Błąd: " + (err.message || String(err)),false);
+    console.error(err);
+  }
+}
+
+
+// expose globals for onclick
+window.pokazPoleArtykulu = pokazPoleArtykulu;
+window.toggleWniosekType = toggleWniosekType;
+window.toggleRaportType = toggleRaportType;
+window.sendPatrolReport = sendPatrolReport;
+window.sendInterwReport = sendInterwReport;
+window.sendZatrzymanieProtocol = sendZatrzymanieProtocol;
