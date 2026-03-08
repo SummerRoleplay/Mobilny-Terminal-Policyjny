@@ -1,9 +1,5 @@
 // ===============================
-// MTP — app.js (FULL UPDATED)
-// ===============================
-
-// ===============================
-// WEBHOOKI (WSTAW SWOJE!)
+// WEBHOOKI
 // ===============================
 const webhookMandat      = "https://discord.com/api/webhooks/1403683432227410001/aSOQ2awWpU5bBgGsgo1E0k_kkBIGU6bwOUEBsuSXgaVc-vp3-cmAlIWk5wHSkkdLheNg";
 const webhookSadDecyzja  = "https://discord.com/api/webhooks/1400235543039840276/eORj9cfyFdBNHEmRavXYoXszjo9fO_NkSV4zP1AJkRmTn5OAxYocKL1q3zkd6Bb50jVc";
@@ -16,11 +12,11 @@ const webhookNagany      = "https://discord.com/api/webhooks/1400233440586240113
 const webhookPochwaly    = "https://discord.com/api/webhooks/1400233266836930641/ahEDsZQ15IL8DysKoUCAehtH-_9lzFixaP96ehax4d8jp-Rxijd8dvcVCt0fN03JqSa1";
 const webhookAwanse      = "https://discord.com/api/webhooks/1471984933227466764/ieXF8Tx-oAyr3ZFS5Jn1ACMGQ_xzASSHwgAQSyoD8pMCnf87omVrSaawch0q4h84Dl-s";
 const webhookZwolnienia  = "https://discord.com/api/webhooks/1471980589597851859/KQSoiWq5v3ViP_D28nmlKSv8OuFzPDNbGHA5FzY50SSzQyky78iztShVpuJdCDH8C9CN";
+const webhookPsychologiczne = "https://discord.com/api/webhooks/1480281220779606239/6zWCesT2bEuqF2t2qrTaw4YaA3l0EoPecd7-_6idwgam_FTERp2UiOidN5W8LH4YUWZz"
 
 
 // ===============================
-// FUNKCJONARIUSZE — NOWE ID + RANGI
-// isBoard: true tylko dla zarządu
+// FUNKCJONARIUSZE
 // ===============================
 const OFFICERS = [
   { id: "480101", name: "Michał Nowacki",   rank: "Inspektor",          pin: "4827", isBoard: true },
@@ -528,7 +524,20 @@ document.addEventListener("DOMContentLoaded", ()=>{
       { name:"Autor (ZARZĄD)", value: clamp($("autorBoard")?.value, 256) }
     ]
   }));
+
+wireBoardForm("psyForm", "statusPsy", webhookPsychologiczne, () => ({
+  title: "🧠 SKIEROWANIE NA BADANIA PSYCHOLOGICZNE — ZARZĄD MTP",
+  color: 0x3498db,
+  fields: [
+    { name:"Funkcjonariusz", value: clamp($("psyName")?.value, 256) },
+    { name:"ID", value: clamp($("psyId")?.value, 64) },
+    { name:"Powód skierowania", value: clamp($("psyReason")?.value, 900) },
+    { name:"Rodzaj badań", value: clamp($("psyType")?.value, 256) },
+    { name:"Autor (ZARZĄD)", value: clamp($("autorBoard")?.value, 256) }
+  ]
+}));
 });
+
 
 
 // ===============================
