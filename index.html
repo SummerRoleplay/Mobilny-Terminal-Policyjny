@@ -20,7 +20,9 @@
       </div>
 
       <div class="topbar">
-        <div id="sessionBadge" class="badge"><span class="dot warn"></span>Brak sesji</div>
+        <div id="sessionBadge" class="badge">
+          <span class="dot warn"></span>Brak sesji
+        </div>
 
         <button id="logoutBtn" class="btn btn-ghost" type="button">
           <span class="meta">
@@ -34,13 +36,16 @@
 
     <div class="card">
       <div class="card-inner">
+
         <div class="card-title">
           <h2>Panel główny</h2>
           <small>Wybierz moduł</small>
         </div>
+
         <div class="hr"></div>
 
         <div class="tabs">
+
           <a class="btn" href="./mandat.html">
             <span class="meta">
               <strong>Wystaw mandat</strong>
@@ -72,17 +77,22 @@
             </span>
             <span class="chev">→</span>
           </a>
+
         </div>
 
-        <!-- ZARZĄD (tylko dla: Nowacki, Nowak, Bielik, Trok, Zieliński) -->
+
+        <!-- ZARZĄD -->
         <div id="zarzadLinks" style="display:none; margin-top:14px;">
+
           <div class="hr"></div>
+
           <div class="card-title" style="margin-bottom:10px;">
             <h2>Panel Zarządu</h2>
             <small>Dostęp ograniczony</small>
           </div>
 
           <div class="tabs">
+
             <a class="btn btn-primary" href="./adaptacja.html">
               <span class="meta">
                 <strong>ZARZĄD: Adaptacja</strong>
@@ -122,6 +132,15 @@
               </span>
               <span class="chev">→</span>
             </a>
+
+            <a class="btn btn-primary" href="./psychologiczne.html">
+              <span class="meta">
+                <strong>ZARZĄD: Badania psychologiczne</strong>
+                <span>Skierowanie funkcjonariusza</span>
+              </span>
+              <span class="chev">→</span>
+            </a>
+
           </div>
         </div>
         <!-- /ZARZĄD -->
@@ -130,15 +149,19 @@
     </div>
   </div>
 
+
   <!-- PIN GATE -->
   <div id="lock" class="lock">
+
     <div class="lock-panel">
+
       <div class="lock-head">
         <h3>Autoryzacja dostępu — MTP</h3>
         <p>KWP GDAŃSK · Wymagany identyfikator i PIN</p>
       </div>
 
       <div class="lock-body">
+
         <div>
           <label for="officerSelect">Funkcjonariusz</label>
           <select id="officerSelect"></select>
@@ -159,10 +182,12 @@
             <span class="chev">↵</span>
           </button>
         </div>
+
       </div>
     </div>
   </div>
 
   <script src="./app.js"></script>
+
 </body>
 </html>
