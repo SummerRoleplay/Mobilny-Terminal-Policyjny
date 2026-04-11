@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<title>Dyżurny — MTP</title>
-<link rel="stylesheet" href="./style.css">
+    <meta charset="UTF-8">
+    <title>Dyżurny — MTP</title>
+    <link rel="icon" href="./KWP.png">
+    <link rel="stylesheet" href="./style.css">
+    <style>
+        /* Kilka szybkich poprawek wizualnych */
+        .pill { cursor: pointer; display: inline-block; margin-bottom: 4px; }
+        .pill:hover { opacity: 0.8; }
+        .patrol-status { border-bottom: 1px solid #eee; padding: 15px 0; }
+        .muted { display: block; font-size: 0.85em; color: #666; }
+        .badge { background: #34495e; color: white; padding: 5px 10px; border-radius: 4px; font-size: 0.9em; }
+    </style>
 </head>
 
 <body data-board="true">
 
 <div class="container">
 
-  <!-- HEADER -->
   <div class="header">
     <div class="brand">
-      <img src="./KWP.png">
+      <img src="./KWP.png" alt="Logo KWP">
       <div>
         <h1>System Dyżurnego — KWP GDAŃSK</h1>
         <p>Summer RP · MTP</p>
@@ -21,39 +29,33 @@
     </div>
 
     <div class="topbar">
-      <div id="sessionBadge" class="badge"></div>
+      <div id="sessionBadge" class="badge">Sesja: Brak</div>
       <button onclick="location.href='./index.html'" class="btn btn-ghost">⬅ Powrót</button>
     </div>
   </div>
 
-  <!-- STATUS / POWIADOMIENIA -->
-  <div id="notify" class="card" style="display:none;">
+  <div id="notify" class="card" style="display:none; position: fixed; top: 20px; right: 20px; z-index: 1000; width: 300px;">
     <div class="card-inner">
       <div id="notifyText" class="status"></div>
     </div>
   </div>
 
-  <!-- NOWY PATROL -->
   <div class="card">
     <div class="card-inner">
       <div class="card-title">
         <h2>Nowy patrol</h2>
         <small>Start służby</small>
       </div>
-
       <div class="hr"></div>
-
       <div class="patrol-grid">
         <div>
           <label>Nr boczny</label>
-          <input id="patrolId">
+          <input id="patrolId" placeholder="np. 101">
         </div>
-
         <div>
           <label>Pojazd</label>
-          <input id="pojazd">
+          <input id="pojazd" placeholder="np. Kia Ceed">
         </div>
-
         <div class="full">
           <button class="btn btn-primary" onclick="addPatrol()">Uruchom służbę</button>
         </div>
@@ -61,42 +63,34 @@
     </div>
   </div>
 
-  <!-- SKŁAD -->
   <div class="card">
     <div class="card-inner">
       <div class="card-title">
         <h2>Skład patrolu</h2>
       </div>
-
       <div class="hr"></div>
-
       <div class="patrol-grid">
         <div>
           <label>Funkcjonariusz</label>
           <select id="officerSelect"></select>
         </div>
-
         <div>
           <label>Patrol</label>
           <select id="assignedPatrol"></select>
         </div>
-
         <div class="full">
-          <button class="btn" onclick="assignOfficer()">Dodaj</button>
+          <button class="btn" onclick="assignOfficer()">Dodaj do składu</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- LISTA -->
   <div class="card">
     <div class="card-inner">
       <div class="card-title">
         <h2>Status patroli</h2>
       </div>
-
       <div class="hr"></div>
-
       <div id="patrolList"></div>
     </div>
   </div>
@@ -111,10 +105,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🔐 SESSION CHECK
   const session = JSON.parse(localStorage.getItem("mtp_session_v2") || "null");
   if (!session || !session.isBoard) {
-    alert("Brak dostępu");
+    alert("Brak dostępu. Zaloguj się.");
     location.href = "./index.html";
     return;
   }
+  
+  // Wyświetl kto zarządza
+  const badge = document.getElementById("sessionBadge");
+  if(badge && session.user) badge.textContent = `Dyżurny: ${session.user}`;
 
   // 👮 OFFICERS SAFE LOAD
   const officersData = window.OFFICERS ?? [];
@@ -122,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 📦 STATE
   let patrols = JSON.parse(localStorage.getItem("patrols_v5") || "[]");
 
-  // 🎨 STATUS CONFIG (teraz używane)
+  // 🎨 STATUS CONFIG
   const STATUS_CONFIG = {
     "Dostępny": { color: "#2ecc71" },
     "Niedostępny": { color: "#ff4d4d" },
@@ -146,14 +144,15 @@ document.addEventListener("DOMContentLoaded", () => {
     text.textContent = msg;
 
     text.className = "status";
-    if (type === "ok") text.classList.add("status-success");
-    if (type === "err") text.classList.add("status-error");
+    if (type === "ok") text.style.borderLeft = "5px solid #2ecc71";
+    if (type === "err") text.style.borderLeft = "5px solid #e74c3c";
 
     setTimeout(() => box.style.display = "none", 2500);
   }
 
   // ⏱ FORMAT
   function formatTime(ms) {
+    if (ms < 0) ms = 0;
     const s = Math.floor(ms / 1000);
     const h = Math.floor(s / 3600);
     const m = Math.floor((s % 3600) / 60);
@@ -175,18 +174,19 @@ document.addEventListener("DOMContentLoaded", () => {
       ? officersData.map(o =>
           `<option value="${o.id}">${o.id} — ${o.rank ?? "brak rangi"} — ${o.name}</option>`
         ).join("")
-      : `<option disabled>Brak funkcjonariuszy</option>`;
+      : `<option disabled>Brak danych w app.js</option>`;
   }
 
   // ➕ ADD PATROL
   window.addPatrol = function () {
-    const id = document.getElementById("patrolId")?.value?.trim();
-    const pojazd = document.getElementById("pojazd")?.value?.trim();
+    const idInput = document.getElementById("patrolId");
+    const pojInput = document.getElementById("pojazd");
+    const id = idInput?.value?.trim();
+    const pojazd = pojInput?.value?.trim();
 
-    if (!id || !pojazd) return notify("Uzupełnij dane", "err");
+    if (!id || !pojazd) return notify("Uzupełnij dane patrolu", "err");
 
     const now = Date.now();
-
     patrols.push({
       id: "GD-" + id,
       pojazd,
@@ -196,6 +196,8 @@ document.addEventListener("DOMContentLoaded", () => {
       statusStart: now
     });
 
+    idInput.value = "";
+    pojInput.value = "";
     save();
     render();
     notify("Patrol uruchomiony");
@@ -206,17 +208,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const officerId = document.getElementById("officerSelect")?.value;
     const patrolId = document.getElementById("assignedPatrol")?.value;
 
-    if (!officerId || !patrolId) return notify("Wybierz dane", "err");
+    if (!officerId || !patrolId) return notify("Wybierz funkcjonariusza i patrol", "err");
 
     const p = patrols.find(x => x.id === patrolId);
     if (!p) return;
 
-    if (!p.officers.includes(officerId)) {
-      p.officers.push(officerId);
-      save();
-      render();
-      notify("Dodano funkcjonariusza");
+    if (p.officers.includes(officerId)) {
+        return notify("Ten funkcjonariusz jest już w tym patrolu", "err");
     }
+
+    p.officers.push(officerId);
+    save();
+    render();
+    notify("Dodano funkcjonariusza");
   };
 
   // ❌ REMOVE OFFICER
@@ -235,11 +239,12 @@ document.addEventListener("DOMContentLoaded", () => {
     patrols[i].statusStart = Date.now();
     save();
     render();
-    notify("Zmiana statusu");
+    notify("Zmieniono status: " + val);
   };
 
   // ❌ DELETE PATROL
   window.deletePatrol = function (i) {
+    if(!confirm("Czy na pewno zakończyć ten patrol?")) return;
     patrols.splice(i, 1);
     save();
     render();
@@ -256,12 +261,6 @@ document.addEventListener("DOMContentLoaded", () => {
     list.innerHTML = "";
 
     patrols.forEach((p, i) => {
-
-      const officersNames = p.officers.map(id => {
-        const o = officersData.find(x => x.id === id);
-        return o ? o.name : id;
-      });
-
       const div = document.createElement("div");
       div.className = "patrol-status";
 
@@ -271,59 +270,58 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="patrol-left">
           <div class="patrol-meta">
             <strong>${p.id}</strong>
-            <span class="muted">${p.pojazd}</span>
-            <span class="muted">Służba: <b class="time" data="${p.start}"></b></span>
-            <span class="muted">Status: <b class="time2" data="${p.statusStart}"></b></span>
+            <span class="muted">Pojazd: ${p.pojazd}</span>
+            <span class="muted">Czas służby: <b class="time" data-time="${p.start}">00:00:00</b></span>
+            <span class="muted">Czas statusu: <b class="time2" data-time="${p.statusStart}">00:00:00</b></span>
           </div>
-
-          <span class="pill" style="background:${color}">
+          <span class="pill" style="background:${color}; color: white; padding: 2px 8px; border-radius: 4px;">
             ${p.status}
           </span>
         </div>
-
-        <div class="patrol-actions">
-          <select onchange="changeStatus(${i},this.value)">
+        <div class="patrol-actions" style="margin-top: 10px;">
+          <select onchange="changeStatus(${i}, this.value)" style="padding: 5px;">
             ${Object.keys(STATUS_CONFIG).map(s =>
-              `<option ${p.status === s ? "selected" : ""}>${s}</option>`
+              `<option value="${s}" ${p.status === s ? "selected" : ""}>${s}</option>`
             ).join("")}
           </select>
-
-          <button class="btn" onclick="deletePatrol(${i})">Zakończ</button>
+          <button class="btn btn-error" onclick="deletePatrol(${i})" style="background: #e74c3c; color:white; border:none; padding: 5px 10px; cursor:pointer;">Zakończ</button>
         </div>
+        <div class="crew-list" style="margin-top: 10px;"></div>
       `;
 
-      const crew = document.createElement("div");
-
-      officersNames.forEach((name, idx) => {
+      const crewDiv = div.querySelector(".crew-list");
+      p.officers.forEach((offId) => {
+        const offData = officersData.find(x => x.id === offId);
+        const nameDisplay = offData ? `${offData.rank} ${offData.name}` : offId;
+        
         const tag = document.createElement("span");
         tag.className = "pill";
-        tag.style.marginRight = "6px";
-        tag.innerText = name + " ✖";
-        tag.onclick = () => removeOfficer(i, p.officers[idx]);
-        crew.appendChild(tag);
+        tag.style.cssText = "background: #eee; color: #333; padding: 2px 8px; border-radius: 10px; margin-right: 5px; border: 1px solid #ccc; font-size: 0.8em;";
+        tag.innerHTML = `${nameDisplay} <strong style="color:red; margin-left:5px;">×</strong>`;
+        tag.onclick = () => removeOfficer(i, offId);
+        crewDiv.appendChild(tag);
       });
 
-      div.appendChild(crew);
       list.appendChild(div);
     });
 
-    assigned.innerHTML = patrols
-      .map(p => `<option>${p.id}</option>`)
-      .join("");
+    // Update selectu patroli w formularzu składu
+    assigned.innerHTML = patrols.length 
+      ? patrols.map(p => `<option value="${p.id}">${p.id}</option>`).join("")
+      : `<option disabled>Brak aktywnych patroli</option>`;
   }
 
   // ⏱ LIVE TIMER
   setInterval(() => {
     const now = Date.now();
-
     document.querySelectorAll(".time").forEach(el => {
-      el.textContent = formatTime(now - el.dataset.data);
+      const startTime = parseInt(el.getAttribute("data-time"));
+      el.textContent = formatTime(now - startTime);
     });
-
     document.querySelectorAll(".time2").forEach(el => {
-      el.textContent = formatTime(now - el.dataset.data);
+      const startTime = parseInt(el.getAttribute("data-time"));
+      el.textContent = formatTime(now - startTime);
     });
-
   }, 1000);
 
   // INIT
