@@ -33,9 +33,9 @@ window.OFFICERS = [
     { id: "481212", name: "Kamil Wojciechowski",    rank: "Posterunkowy",          pin: "4182" },
     { id: "481313", name: "Tomasz Dunczyk",         rank: "Posterunkowy",          pin: "6053" },
     { id: "481414", name: "Dawid Bieg",             rank: "Posterunkowy",          pin: "5365" },
-    { id: "481515", name: "Aleksander Polkowski",   rank: "Posterunkowy",          pin: "7437" },
-    { id: "481616", name: "Krzysztof Zielinski",    rank: "Sierżant",              pin: "7437" },
-    { id: "481717", name: "Mariusz Tarkowski",      rank: "Posterunkowy",          pin: "7437" }
+    { id: "481515", name: "Aleksander Polkowski",   rank: "Posterunkowy",          pin: "1129" },
+    { id: "481616", name: "Krzysztof Zielinski",    rank: "Sierżant",              pin: "2486" },
+    { id: "481717", name: "Mariusz Tarkowski",      rank: "Posterunkowy",          pin: "9071" }
 ];
 
 const SESSION_KEY = "mtp_session_v2";
