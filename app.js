@@ -1,93 +1,5 @@
-/* INICJACJA AUDIO (Rozwiązuje problem blokady przeglądarki) */
-let audioInitialized = false;
-
-function initAudio() {
-  if (audioInitialized) return;
-  // Odtwarzamy i pauzujemy każdy dźwięk, by "odblokować" kolejkę audio
-  ['snd-click', 'snd-success', 'snd-error'].forEach(id => {
-    const a = document.getElementById(id);
-    if(a) {
-      a.play().then(() => { a.pause(); a.currentTime = 0; })
-       .catch(e => console.log("Czekam na interakcję..."));
-    }
-  });
-  audioInitialized = true;
-}
-
-function playSound(id) {
-  const audio = document.getElementById(id);
-  if (audio) {
-    audio.currentTime = 0;
-    audio.play().catch(e => console.error("Błąd audio:", e));
-  }
-}
-
-/* WEBHOOKI */
-const W_LEK="https://discord.com/api/webhooks/1480275580279722125/6rnHYb77BAgd8UEmOBkF1xKZooS25RNVkwVb55WRtmeG-jSgkGHBWNQdROhbx2VnkDnZ";
-// ... (reszta Twoich webhooków bez zmian)
-
-/* NAWIGACJA */
-function openTab(id){
-  initAudio(); // Próba inicjacji przy kliknięciu
-  playSound('snd-click'); 
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-/* WYSYŁANIE FORMULARZA */
-function sendForm(e, webhooks, title, colors) {
-  e.preventDefault();
-  initAudio();
-  const form = e.target;
-  let fields = [];
-
-  form.querySelectorAll("label").forEach(label => {
-    let input = label.nextElementSibling;
-    if (input && input.value) {
-      const isLong = input.tagName === "TEXTAREA" || input.value.length > 35;
-      fields.push({
-        name: `🔹 ${label.innerText}`,
-        value: `\`\`\`${input.value}\`\`\``,
-        inline: !isLong
-      });
-    }
-  });
-
-  Promise.all(webhooks.map(webhook => 
-    fetch(webhook, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        embeds: [{
-          title: `👮 KWP — ${title.toUpperCase()}`,
-          color: colors[0] || 2303786,
-          fields: fields,
-          timestamp: new Date().toISOString(),
-          footer: { text: "System MTP • KWP Gdańsk" }
-        }]
-      })
-    })
-  ))
-  .then(() => {
-    const successDiv = form.querySelector(".success");
-    successDiv.style.color = "#00ff88";
-    successDiv.innerText = "✓ Zgłoszenie wysłane do centrali";
-    playSound('snd-success'); 
-    form.reset();
-    setTimeout(() => { successDiv.innerText = ""; }, 5000);
-  })
-  .catch(() => {
-    const successDiv = form.querySelector(".success");
-    successDiv.style.color = "#ff3b3b";
-    successDiv.innerText = "✕ BŁĄD SYSTEMU NADANIA";
-    playSound('snd-error');
-  });
-}
-
-// Podpięcie pod przyciski menu, aby odblokować audio
-document.addEventListener('click', initAudio, { once: true });
 // ===============================
-// WEBHOOKI
+// WEBHOOKI (Konfiguracja)
 // ===============================
 const webhookMandat      = "https://discord.com/api/webhooks/1403683432227410001/aSOQ2awWpU5bBgGsgo1E0k_kkBIGU6bwOUEBsuSXgaVc-vp3-cmAlIWk5wHSkkdLheNg";
 const webhookSadDecyzja  = "https://discord.com/api/webhooks/1400235543039840276/eORj9cfyFdBNHEmRavXYoXszjo9fO_NkSV4zP1AJkRmTn5OAxYocKL1q3zkd6Bb50jVc";
@@ -100,61 +12,135 @@ const webhookNagany      = "https://discord.com/api/webhooks/1400233440586240113
 const webhookPochwaly    = "https://discord.com/api/webhooks/1400233266836930641/ahEDsZQ15IL8DysKoUCAehtH-_9lzFixaP96ehax4d8jp-Rxijd8dvcVCt0fN03JqSa1";
 const webhookAwanse      = "https://discord.com/api/webhooks/1471984933227466764/ieXF8Tx-oAyr3ZFS5Jn1ACMGQ_xzASSHwgAQSyoD8pMCnf87omVrSaawch0q4h84Dl-s";
 const webhookZwolnienia  = "https://discord.com/api/webhooks/1471980589597851859/KQSoiWq5v3ViP_D28nmlKSv8OuFzPDNbGHA5FzY50SSzQyky78iztShVpuJdCDH8C9CN";
-const webhookPsychologiczne = "https://discord.com/api/webhooks/1480281220779606239/6zWCesT2bEuqF2t2qrTaw4YaA3l0EoPecd7-_6idwgam_FTERp2UiOidN5W8LH4YUWZz"
-
+const webhookPsychologiczne = "https://discord.com/api/webhooks/1480281220779606239/6zWCesT2bEuqF2t2qrTaw4YaA3l0EoPecd7-_6idwgam_FTERp2UiOidN5W8LH4YUWZz";
 
 // ===============================
-// FUNKCJONARIUSZE
+// FUNKCJONARIUSZE (Baza Danych)
+// Przypisanie do window. gwarantuje widoczność w HTML
 // ===============================
-const OFFICERS = [
-  { id: "480101", name: "Michał Nowacki",   rank: "Inspektor",         pin: "4827", isBoard: true },
-  { id: "480202", name: "Michał Zieliński", rank: "Młodszy Inspektor",  pin: "9042", isBoard: true },
-  { id: "480303", name: "Anna Nowak",       rank: "Podinspektor",       pin: "0711", isBoard: true },
-  { id: "480404", name: "Aleksander Trok",  rank: "Podinspektor",       pin: "1568", isBoard: true },
-  { id: "480505", name: "Leonard Bielik",   rank: "Komisarz",            pin: "7394", isBoard: true },
-
-  { id: "480606", name: "Mariusz Tarkowski",      rank: "Starszy Aspirant",      pin: "3175" },
-  { id: "480707", name: "Bartłomiej Kowalewski",  rank: "Sierżant",               pin: "6281" },
-  { id: "480808", name: "Hubert Jogurt",           rank: "Starszy Posterunkowy",  pin: "8459" },
-  { id: "480909", name: "Ignacy Borowski",          rank: "Posterunkowy",          pin: "2706" },
-  { id: "481010", name: "Kamil Brzoza",             rank: "Posterunkowy",          pin: "5913" },
-  { id: "481111", name: "Szymon Klacz",             rank: "Posterunkowy",          pin: "7630" },
-  { id: "481212", name: "Kamil Wojciechowski",      rank: "Posterunkowy",          pin: "4182" },
-  { id: "481313", name: "Tomasz Dunczyk",           rank: "Posterunkowy",          pin: "6053" },
-  { id: "481414", name: "Dawid Bieg",               rank: "Posterunkowy",          pin: "5365" },
-  { id: "481515", name: "Aleksander Polkowski",           rank: "Posterunkowy",          pin: "7437" },
-  { id: "481616", name: "Krzysztof Zielinski",           rank: "Sierżant",          pin: "7437" },
-  { id: "481717", name: "Mariusz Tarkowski",           rank: "Posterunkowy",          pin: "7437" },
-
+window.OFFICERS = [
+    { id: "480101", name: "Michał Nowacki",   rank: "Inspektor",           pin: "4827", isBoard: true },
+    { id: "480202", name: "Michał Zieliński", rank: "Młodszy Inspektor",   pin: "9042", isBoard: true },
+    { id: "480303", name: "Anna Nowak",       rank: "Podinspektor",        pin: "0711", isBoard: true },
+    { id: "480404", name: "Aleksander Trok",  rank: "Podinspektor",        pin: "1568", isBoard: true },
+    { id: "480505", name: "Leonard Bielik",   rank: "Komisarz",            pin: "7394", isBoard: true },
+    { id: "480606", name: "Mariusz Tarkowski",      rank: "Starszy Aspirant",      pin: "3175" },
+    { id: "480707", name: "Bartłomiej Kowalewski",  rank: "Sierżant",              pin: "6281" },
+    { id: "480808", name: "Hubert Jogurt",          rank: "Starszy Posterunkowy",  pin: "8459" },
+    { id: "480909", name: "Ignacy Borowski",        rank: "Posterunkowy",          pin: "2706" },
+    { id: "481010", name: "Kamil Brzoza",           rank: "Posterunkowy",          pin: "5913" },
+    { id: "481111", name: "Szymon Klacz",           rank: "Posterunkowy",          pin: "7630" },
+    { id: "481212", name: "Kamil Wojciechowski",    rank: "Posterunkowy",          pin: "4182" },
+    { id: "481313", name: "Tomasz Dunczyk",         rank: "Posterunkowy",          pin: "6053" },
+    { id: "481414", name: "Dawid Bieg",             rank: "Posterunkowy",          pin: "5365" },
+    { id: "481515", name: "Aleksander Polkowski",   rank: "Posterunkowy",          pin: "7437" },
+    { id: "481616", name: "Krzysztof Zielinski",    rank: "Sierżant",              pin: "7437" },
+    { id: "481717", name: "Mariusz Tarkowski",      rank: "Posterunkowy",          pin: "7437" }
 ];
 
 const SESSION_KEY = "mtp_session_v2";
 const SESSION_TTL_MIN = 180;
 
 // ===============================
-// Helpers
+// POMOCNIKI (Helpers)
 // ===============================
-function $(id){ return document.getElementById(id); }
-function nowISO(){ return new Date().toISOString(); }
+function $(id) { return document.getElementById(id); }
+function nowISO() { return new Date().toISOString(); }
 
-// NAPRAWA: Dodanie brakującej funkcji clamp
 function clamp(str, max) {
-  if (!str) return "—";
-  str = String(str);
-  return str.length > max ? str.substring(0, max - 3) + "..." : str;
+    if (!str) return "—";
+    str = String(str);
+    return str.length > max ? str.substring(0, max - 3) + "..." : str;
 }
 
-// NAPRAWA: Dodanie brakującej funkcji escQuote i escList
 function escQuote(str) { return str ? `\`${str}\`` : "—"; }
 function escList(str) { return str ? str.replace(/\n/g, ", ") : "—"; }
 
-function setStatus(elementId, message, isSuccess){
-  const el = $(elementId);
-  if(!el) return;
-  el.textContent = message;
-  el.classList.remove("status-success","status-error");
-  if(isSuccess === true) el.classList.add("status-success");
-  if(isSuccess === false) el.classList.add("status-error");
+function setStatus(elementId, message, isSuccess) {
+    const el = $(elementId);
+    if (!el) return;
+    el.textContent = message;
+    el.classList.remove("status-success", "status-error");
+    if (isSuccess === true) { el.classList.add("status-success"); playSound('snd-success'); }
+    else if (isSuccess === false) { el.classList.add("status-error"); playSound('snd-error'); }
+}
+
+// ===============================
+// SESJA I LOGOWANIE
+// ===============================
+function getSession() {
+    try {
+        const raw = localStorage.getItem(SESSION_KEY);
+        if (!raw) return null;
+        const s = JSON.parse(raw);
+        const age = Date.now() - (s.ts || 0);
+        if (age > SESSION_TTL_MIN * 60 * 1000) return null;
+        return s;
+    } catch { return null; }
+}
+
+function buildOfficerSelect() {
+    const sel = $("officerSelect");
+    if (!sel) return;
+    sel.innerHTML = `<option value="" disabled selected>Wybierz funkcjonariusza...</option>` +
+        window.OFFICERS.map(o => `<option value="${o.id}">${o.id} — ${o.rank} — ${o.name}</option>`).join("");
+}
+
+function handleLogin() {
+    const officerId = $("officerSelect")?.value;
+    const pin = ($("pinInput")?.value || "").trim();
+    const officer = window.OFFICERS.find(o => o.id === officerId);
+
+    if (!officer || pin !== officer.pin) {
+        return setStatus("statusGate", "Niepoprawny numer legitymacji lub PIN.", false);
+    }
+
+    localStorage.setItem(SESSION_KEY, JSON.stringify({
+        officerId: officer.id,
+        officerName: officer.name,
+        officerRank: officer.rank,
+        isBoard: !!officer.isBoard,
+        ts: Date.now()
+    }));
+
+    $("lock")?.classList.remove("show");
+    updateSessionBadge();
+    autofillOfficer();
+    updateBoardVisibility();
+}
+
+function handleLogout() {
+    localStorage.removeItem(SESSION_KEY);
+    location.reload();
+}
+
+function updateSessionBadge() {
+    const badge = $("sessionBadge");
+    const s = getSession();
+    if (!badge) return;
+    if (!s) { badge.innerHTML = `<span class="dot warn"></span>Brak sesji`; return; }
+    const role = s.isBoard ? "ZARZĄD" : "Funkcjonariusz";
+    badge.innerHTML = `<span class="dot"></span>${role}: <b>${s.officerId}</b> · ${s.officerRank} · ${s.officerName}`;
+}
+
+function requireGate() {
+    if (!getSession()) { $("lock")?.classList.add("show"); return null; }
+    return getSession();
+}
+
+function updateBoardVisibility() {
+    const box = $("zarzadLinks");
+    if (box) box.style.display = (getSession()?.isBoard) ? "grid" : "none";
+}
+
+function autofillOfficer() {
+    const s = getSession();
+    if (!s) return;
+    const display = `${s.officerId} — ${s.officerRank} — ${s.officerName}`;
+    ["funkcjonariusz", "sporadzilPatrol", "sporadzilInterw", "funkcjonariuszZatrzymanie", "autorBoard"].forEach(id => {
+        const el = $(id);
+        if (el && !el.value) el.value = display;
+    });
 }
 
 // ===============================
