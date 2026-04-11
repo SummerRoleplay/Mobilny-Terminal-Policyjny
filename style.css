@@ -1,136 +1,144 @@
-/* ==========================
-   ROOT / THEME
-========================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Rajdhani:wght@500;600;700&display=swap');
+
 :root{
-  --bg:#0b1220;
-  --panel:rgba(15,22,38,.78);
-  --panel-strong:rgba(12,18,32,.92);
-  --stroke:rgba(255,255,255,.10);
-  --text:#e8eefc;
-  --muted:rgba(232,238,252,.72);
+  --bg:#070b14;
+  --panel:rgba(15,22,38,.65);
+  --panel-strong:rgba(10,16,30,.92);
+
+  --stroke:rgba(255,255,255,.08);
+  --stroke-strong:rgba(74,163,255,.35);
+
+  --text:#eaf1ff;
+  --muted:rgba(234,241,255,.65);
 
   --accent:#4aa3ff;
+
   --good:#2ecc71;
   --bad:#ff4d4d;
   --warn:#ffcc66;
 
-  --radius:16px;
+  --radius:18px;
   --radius-sm:12px;
 
-  --shadow:0 20px 60px rgba(0,0,0,.45);
+  --shadow:0 25px 80px rgba(0,0,0,.55);
+  --glow:0 0 40px rgba(74,163,255,.25);
 }
 
-/* ==========================
-   RESET
-========================== */
-*,
-*::before,
-*::after{
+/* RESET */
+*{
   box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
 html,body{
   height:100%;
-  margin:0;
+  font-family:"Inter", system-ui, sans-serif;
+  color:var(--text);
 }
 
-/* ==========================
-   BACKGROUND (FIX)
-========================== */
+/* BACKGROUND */
 body{
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  color:var(--text);
-  background:transparent;
+  background:var(--bg);
 }
 
 body::before{
   content:"";
   position:fixed;
   inset:0;
-  z-index:-1;
+  z-index:-2;
 
   background:
-    radial-gradient(1200px 800px at 20% 10%, rgba(74,163,255,.18), transparent 60%),
-    radial-gradient(900px 600px at 90% 20%, rgba(46,204,113,.10), transparent 55%),
-    radial-gradient(800px 600px at 50% 90%, rgba(255,77,77,.08), transparent 55%),
-    linear-gradient(180deg, #070b14, #0b1220 55%, #070b14);
-
-  background-size:cover;
-  background-attachment:fixed;
+    radial-gradient(1000px 700px at 20% 10%, rgba(74,163,255,.22), transparent 60%),
+    radial-gradient(800px 600px at 80% 20%, rgba(124,92,255,.16), transparent 55%),
+    radial-gradient(700px 500px at 50% 90%, rgba(46,204,113,.10), transparent 60%),
+    linear-gradient(180deg, #050811, #0b1220 60%, #050811);
 }
 
-/* ==========================
-   LAYOUT
-========================== */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size:60px 60px;
+  opacity:.12;
+
+  mask-image: radial-gradient(circle, black 40%, transparent 80%);
+}
+
+/* TYPO */
+h1,h2,h3,.brand h1{
+  font-family:"Rajdhani", sans-serif;
+  letter-spacing:.4px;
+}
+
+/* CONTAINER */
 .container{
-  max-width:1100px;
+  max-width:1150px;
   margin:auto;
-  padding:28px 18px;
+  padding:30px 18px;
 }
 
-/* ==========================
-   HEADER
-========================== */
+/* HEADER */
 .header{
   display:flex;
   justify-content:space-between;
-  gap:14px;
+  align-items:center;
+  gap:16px;
 
-  padding:18px;
+  padding:18px 20px;
   border-radius:var(--radius);
-  border:1px solid var(--stroke);
 
   background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-  backdrop-filter:blur(10px);
+  border:1px solid var(--stroke);
 
+  backdrop-filter: blur(14px);
   box-shadow:var(--shadow);
 }
 
 .brand{
   display:flex;
-  gap:14px;
   align-items:center;
+  gap:14px;
 }
 
 .brand img{
   width:56px;
   height:56px;
-  border-radius:12px;
-  border:1px solid var(--stroke);
-  background:rgba(255,255,255,.04);
-}
-
-.brand h1{
-  margin:0;
-  font-size:18px;
+  border-radius:14px;
+  border:1px solid var(--stroke-strong);
+  box-shadow:var(--glow);
 }
 
 .brand p{
-  margin:4px 0 0;
-  font-size:13px;
+  font-size:12px;
   color:var(--muted);
 }
 
+/* TOPBAR */
 .topbar{
   display:flex;
+  align-items:center;
   gap:10px;
-  flex-wrap:wrap;
 }
 
-/* ==========================
-   BADGES
-========================== */
+/* BADGE */
 .badge{
   display:flex;
   align-items:center;
   gap:8px;
 
-  padding:10px 12px;
-  border-radius:14px;
-  border:1px solid var(--stroke);
+  padding:10px 14px;
+  border-radius:999px;
 
-  background:rgba(0,0,0,.20);
-  font-size:13px;
+  border:1px solid var(--stroke);
+  background:rgba(0,0,0,.25);
+
+  font-size:12px;
   color:var(--muted);
 }
 
@@ -139,90 +147,96 @@ body::before{
   height:9px;
   border-radius:50%;
   background:var(--good);
-  box-shadow:0 0 0 4px rgba(46,204,113,.14);
+  box-shadow:0 0 10px rgba(46,204,113,.6);
 }
 
 .dot.warn{
   background:var(--warn);
-  box-shadow:0 0 0 4px rgba(255,204,102,.16);
 }
 
-/* ==========================
-   CARDS
-========================== */
+/* CARD */
 .card{
-  margin-top:16px;
+  margin-top:18px;
+
   border-radius:var(--radius);
+  background:var(--panel);
+
   border:1px solid var(--stroke);
 
-  background:var(--panel);
-  backdrop-filter:blur(12px);
-
+  backdrop-filter: blur(16px);
   box-shadow:var(--shadow);
+
+  overflow:hidden;
 }
 
-.card-inner{padding:18px;}
+.card-inner{
+  padding:20px;
+}
 
 .card-title{
   display:flex;
   justify-content:space-between;
-  gap:12px;
+  align-items:center;
 }
 
-.card-title h2{margin:0;font-size:16px;}
-.card-title small{color:var(--muted);}
+.card-title small{
+  color:var(--muted);
+}
 
 .hr{
   height:1px;
-  background:var(--stroke);
   margin:14px 0;
+  background:linear-gradient(90deg, transparent, var(--stroke), transparent);
 }
 
-/* ==========================
-   BUTTONS (IMPROVED)
-========================== */
+/* GRID */
+.tabs{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+@media(max-width:900px){
+  .tabs{grid-template-columns:1fr;}
+}
+
+/* BUTTONS */
 .btn{
   display:flex;
   justify-content:space-between;
   align-items:center;
 
-  padding:14px 18px;
+  padding:16px 18px;
+
   border-radius:var(--radius-sm);
+  border:1px solid var(--stroke);
 
-  border:1px solid rgba(255,255,255,.08);
   background:rgba(255,255,255,.03);
-
-  text-decoration:none;
   color:var(--text);
+  text-decoration:none;
 
-  transition:all .2s ease;
+  transition:.25s ease;
+  position:relative;
+  overflow:hidden;
 }
 
 .btn:hover{
-  transform:translateY(-2px);
-  border-color:rgba(74,163,255,.3);
-  background:rgba(255,255,255,.06);
-}
-
-.btn:active{
-  transform:translateY(0);
-}
-
-.btn-primary{
-  background:linear-gradient(180deg, rgba(74,163,255,.24), rgba(74,163,255,.10));
+  transform:translateY(-3px);
   border-color:rgba(74,163,255,.35);
+  box-shadow:0 20px 40px rgba(0,0,0,.4);
 }
 
-.btn-ghost{
-  background:rgba(0,0,0,.18);
+/* PRIMARY */
+.btn-primary{
+  background:linear-gradient(180deg, rgba(74,163,255,.18), rgba(74,163,255,.06));
+  border-color:rgba(74,163,255,.3);
 }
 
-/* ==========================
-   META TEXT
-========================== */
+/* TEXT */
 .meta{
   display:flex;
   flex-direction:column;
+  gap:2px;
 }
 
 .meta strong{
@@ -237,145 +251,62 @@ body::before{
 
 .chev{
   font-size:18px;
-  color:rgba(255,255,255,.4);
+  opacity:.6;
 }
 
-/* ==========================
-   INPUTS
-========================== */
-label{
-  display:block;
-  margin-bottom:6px;
-  font-size:12px;
-  color:var(--muted);
-}
-
-input, select, textarea{
+/* INPUTS */
+input,select,textarea{
   width:100%;
-  padding:12px;
+  padding:12px 14px;
+
   border-radius:14px;
+  border:1px solid var(--stroke);
 
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(0,0,0,.22);
-
+  background:rgba(0,0,0,.25);
   color:var(--text);
+
+  outline:none;
 }
 
-input:focus,
-select:focus,
-textarea:focus{
-  border-color:rgba(74,163,255,.55);
-  box-shadow:0 0 0 4px rgba(74,163,255,.14);
+input:focus{
+  border-color:var(--stroke-strong);
+  box-shadow:0 0 0 4px rgba(74,163,255,.12);
 }
 
-textarea{
-  min-height:110px;
-  resize:vertical;
-}
-
-/* ==========================
-   STATUS
-========================== */
+/* STATUS */
 .status{
   padding:10px 12px;
-  border-radius:14px;
-  border:1px dashed rgba(255,255,255,.14);
+  border-radius:12px;
 
-  background:rgba(0,0,0,.18);
+  border:1px dashed var(--stroke);
   color:var(--muted);
+  background:rgba(0,0,0,.2);
 }
 
-.status-success{
-  border-color:rgba(46,204,113,.35);
-  color:var(--good);
-}
-
-.status-error{
-  border-color:rgba(255,77,77,.45);
-  color:var(--bad);
-}
-
-/* ==========================
-   PATROL MODE
-========================== */
-.patrol-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-}
-
-@media(max-width:900px){
-  .patrol-grid{
-    grid-template-columns:1fr;
-  }
-}
-
-.full{grid-column:1 / -1;}
-
-.patrol-status{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-
-  padding:12px;
-  border-radius:var(--radius);
-
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(0,0,0,.16);
-}
-
-.patrol-left{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-}
-
-.pill{
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:700;
-
-  border:1px solid rgba(255,255,255,.14);
-  background:rgba(255,255,255,.06);
-}
-
-.pill.on{
-  border-color:rgba(46,204,113,.4);
-  background:rgba(46,204,113,.14);
-}
-
-.patrol-actions{
-  display:flex;
-  gap:10px;
-}
-
-/* ==========================
-   LOCK SCREEN
-========================== */
+/* LOCK SCREEN FIXED */
 .lock{
   position:fixed;
   inset:0;
-
   display:none;
+
   align-items:center;
   justify-content:center;
 
-  z-index:9999;
-
-  backdrop-filter:blur(24px) brightness(.7);
+  backdrop-filter: blur(25px);
+  background:rgba(0,0,0,.6);
 }
 
-.lock.show{display:flex;}
+.lock.show{
+  display:flex;
+}
 
 .lock-panel{
-  width:min(520px,100%);
-  border-radius:var(--radius);
-  overflow:hidden;
+  width:min(520px, 95%);
 
-  border:1px solid rgba(255,255,255,.14);
+  border-radius:var(--radius);
   background:var(--panel-strong);
 
+  border:1px solid var(--stroke);
   box-shadow:var(--shadow);
 }
 
@@ -385,7 +316,26 @@ textarea{
 }
 
 .lock-body{
-  padding:16px;
-  display:grid;
-  gap:12px;
+  padding:18px;
+
+  display:flex;
+  flex-direction:column;
+  gap:14px; /* 🔥 FIX NACHODZENIA */
+}
+
+.lock-body > div{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.lock-body input{
+  height:44px;
+}
+
+/* BUTTON LOGIN */
+.lock-actions{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:6px;
 }
