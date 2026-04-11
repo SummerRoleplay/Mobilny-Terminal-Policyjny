@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTP — Zarząd: Adaptacja</title>
+  <link rel="icon" href="./KWP.png">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body data-board="true">
+  <div class="container">
+    <div class="header">
+      <div class="brand">
+        <img src="./KWP.png" alt="KWP">
+        <div><h1>ZARZĄD MTP — Wynik adaptacji</h1><p>Dostęp tylko dla sztabu szkoleniowego</p></div>
+      </div>
+      <div class="topbar">
+        <div id="sessionBadge" class="badge"><span class="dot warn"></span>Brak sesji</div>
+        <button id="logoutBtn" class="btn btn-ghost" type="button">Wyloguj</button>
+        <a class="btn btn-ghost" href="./index.html">Powrót</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-title"><h2>Wpis adaptacji</h2><small>Webhook: zarząd-adaptacja</small></div>
+        <div class="hr"></div>
+
+        <form id="adaptacjaForm" class="form">
+          <div><label>Kandydat (Imię Nazwisko) *</label><input id="candName" required></div>
+          <div><label>ID *</label><input id="candId" required></div>
+
+          <div><label>Okres adaptacji *</label><input id="adaptPeriod" required placeholder="np. 7 dni / 14 dni"></div>
+          <div>
+            <label>Wynik *</label>
+            <select id="adaptResult" required>
+              <option value="" selected disabled>Wybierz…</option>
+              <option>Pozytywny</option>
+              <option>Warunkowy</option>
+              <option>Negatywny</option>
+            </select>
+          </div>
+
+          <div class="full"><label>Ocena / komentarz *</label><textarea id="adaptComment" required></textarea></div>
+
+          <div><label>Decyzja *</label>
+            <select id="adaptDecision" required>
+              <option value="" selected disabled>Wybierz…</option>
+              <option>Przyjęcie</option>
+              <option>Przedłużenie adaptacji</option>
+              <option>Odrzucenie</option>
+            </select>
+          </div>
+          <div><label>Autor (ZARZĄD)</label><input id="autorBoard" placeholder="uzupełni się po logowaniu"></div>
+
+          <div id="statusAdaptacja" class="status full">—</div>
+          <div class="actions">
+            <button class="btn btn-primary" type="submit">Wyślij</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIN GATE -->
+  <div id="lock" class="lock">
+    <div class="lock-panel">
+      <div class="lock-head"><h3>Autoryzacja dostępu — MTP</h3><p>Wymagany identyfikator i PIN</p></div>
+      <div class="lock-body">
+        <div><label>Funkcjonariusz</label><select id="officerSelect"></select></div>
+        <div><label>PIN</label><input id="pinInput" type="password" inputmode="numeric" maxlength="12"><div id="statusGate" class="small">—</div></div>
+        <div class="lock-actions"><button id="loginBtn" class="btn btn-primary" type="button">Zaloguj</button></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

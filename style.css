@@ -1,0 +1,391 @@
+/* ==========================
+   ROOT / THEME
+========================== */
+:root{
+  --bg:#0b1220;
+  --panel:rgba(15,22,38,.78);
+  --panel-strong:rgba(12,18,32,.92);
+  --stroke:rgba(255,255,255,.10);
+  --text:#e8eefc;
+  --muted:rgba(232,238,252,.72);
+
+  --accent:#4aa3ff;
+  --good:#2ecc71;
+  --bad:#ff4d4d;
+  --warn:#ffcc66;
+
+  --radius:16px;
+  --radius-sm:12px;
+
+  --shadow:0 20px 60px rgba(0,0,0,.45);
+}
+
+/* ==========================
+   RESET
+========================== */
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
+}
+
+html,body{
+  height:100%;
+  margin:0;
+}
+
+/* ==========================
+   BACKGROUND (FIX)
+========================== */
+body{
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  color:var(--text);
+  background:transparent;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+
+  background:
+    radial-gradient(1200px 800px at 20% 10%, rgba(74,163,255,.18), transparent 60%),
+    radial-gradient(900px 600px at 90% 20%, rgba(46,204,113,.10), transparent 55%),
+    radial-gradient(800px 600px at 50% 90%, rgba(255,77,77,.08), transparent 55%),
+    linear-gradient(180deg, #070b14, #0b1220 55%, #070b14);
+
+  background-size:cover;
+  background-attachment:fixed;
+}
+
+/* ==========================
+   LAYOUT
+========================== */
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:28px 18px;
+}
+
+/* ==========================
+   HEADER
+========================== */
+.header{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+
+  padding:18px;
+  border-radius:var(--radius);
+  border:1px solid var(--stroke);
+
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  backdrop-filter:blur(10px);
+
+  box-shadow:var(--shadow);
+}
+
+.brand{
+  display:flex;
+  gap:14px;
+  align-items:center;
+}
+
+.brand img{
+  width:56px;
+  height:56px;
+  border-radius:12px;
+  border:1px solid var(--stroke);
+  background:rgba(255,255,255,.04);
+}
+
+.brand h1{
+  margin:0;
+  font-size:18px;
+}
+
+.brand p{
+  margin:4px 0 0;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.topbar{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+/* ==========================
+   BADGES
+========================== */
+.badge{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid var(--stroke);
+
+  background:rgba(0,0,0,.20);
+  font-size:13px;
+  color:var(--muted);
+}
+
+.dot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--good);
+  box-shadow:0 0 0 4px rgba(46,204,113,.14);
+}
+
+.dot.warn{
+  background:var(--warn);
+  box-shadow:0 0 0 4px rgba(255,204,102,.16);
+}
+
+/* ==========================
+   CARDS
+========================== */
+.card{
+  margin-top:16px;
+  border-radius:var(--radius);
+  border:1px solid var(--stroke);
+
+  background:var(--panel);
+  backdrop-filter:blur(12px);
+
+  box-shadow:var(--shadow);
+}
+
+.card-inner{padding:18px;}
+
+.card-title{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.card-title h2{margin:0;font-size:16px;}
+.card-title small{color:var(--muted);}
+
+.hr{
+  height:1px;
+  background:var(--stroke);
+  margin:14px 0;
+}
+
+/* ==========================
+   BUTTONS (IMPROVED)
+========================== */
+.btn{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:14px 18px;
+  border-radius:var(--radius-sm);
+
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);
+
+  text-decoration:none;
+  color:var(--text);
+
+  transition:all .2s ease;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  border-color:rgba(74,163,255,.3);
+  background:rgba(255,255,255,.06);
+}
+
+.btn:active{
+  transform:translateY(0);
+}
+
+.btn-primary{
+  background:linear-gradient(180deg, rgba(74,163,255,.24), rgba(74,163,255,.10));
+  border-color:rgba(74,163,255,.35);
+}
+
+.btn-ghost{
+  background:rgba(0,0,0,.18);
+}
+
+/* ==========================
+   META TEXT
+========================== */
+.meta{
+  display:flex;
+  flex-direction:column;
+}
+
+.meta strong{
+  font-size:14px;
+  font-weight:700;
+}
+
+.meta span{
+  font-size:12px;
+  color:var(--muted);
+}
+
+.chev{
+  font-size:18px;
+  color:rgba(255,255,255,.4);
+}
+
+/* ==========================
+   INPUTS
+========================== */
+label{
+  display:block;
+  margin-bottom:6px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+input, select, textarea{
+  width:100%;
+  padding:12px;
+  border-radius:14px;
+
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.22);
+
+  color:var(--text);
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:rgba(74,163,255,.55);
+  box-shadow:0 0 0 4px rgba(74,163,255,.14);
+}
+
+textarea{
+  min-height:110px;
+  resize:vertical;
+}
+
+/* ==========================
+   STATUS
+========================== */
+.status{
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px dashed rgba(255,255,255,.14);
+
+  background:rgba(0,0,0,.18);
+  color:var(--muted);
+}
+
+.status-success{
+  border-color:rgba(46,204,113,.35);
+  color:var(--good);
+}
+
+.status-error{
+  border-color:rgba(255,77,77,.45);
+  color:var(--bad);
+}
+
+/* ==========================
+   PATROL MODE
+========================== */
+.patrol-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+@media(max-width:900px){
+  .patrol-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+.full{grid-column:1 / -1;}
+
+.patrol-status{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+
+  padding:12px;
+  border-radius:var(--radius);
+
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(0,0,0,.16);
+}
+
+.patrol-left{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.pill{
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+}
+
+.pill.on{
+  border-color:rgba(46,204,113,.4);
+  background:rgba(46,204,113,.14);
+}
+
+.patrol-actions{
+  display:flex;
+  gap:10px;
+}
+
+/* ==========================
+   LOCK SCREEN
+========================== */
+.lock{
+  position:fixed;
+  inset:0;
+
+  display:none;
+  align-items:center;
+  justify-content:center;
+
+  z-index:9999;
+
+  backdrop-filter:blur(24px) brightness(.7);
+}
+
+.lock.show{display:flex;}
+
+.lock-panel{
+  width:min(520px,100%);
+  border-radius:var(--radius);
+  overflow:hidden;
+
+  border:1px solid rgba(255,255,255,.14);
+  background:var(--panel-strong);
+
+  box-shadow:var(--shadow);
+}
+
+.lock-head{
+  padding:16px;
+  border-bottom:1px solid var(--stroke);
+}
+
+.lock-body{
+  padding:16px;
+  display:grid;
+  gap:12px;
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTP — Wniosek</title>
+  <link rel="icon" href="./KWP.png">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="brand">
+        <img src="./KWP.png" alt="KWP">
+        <div><h1>MTP — Wniosek do sądu</h1><p>KWP GDAŃSK · Summer RP</p></div>
+      </div>
+      <div class="topbar">
+        <div id="sessionBadge" class="badge"><span class="dot warn"></span>Brak sesji</div>
+        <a class="btn btn-ghost" href="./index.html"><span class="meta"><strong>Powrót</strong><span>Panel</span></span><span class="chev">←</span></a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-title"><h2>Wniosek</h2><small>Webhook: Wniosek + Sąd decyzja</small></div>
+        <div class="hr"></div>
+
+        <form id="wniosekForm" class="form">
+          <div>
+            <label>Ukarany (IC) *</label>
+            <input id="ukarany" required>
+          </div>
+          <div>
+            <label>Nick (OOC)</label>
+            <input id="nickWniosek">
+          </div>
+
+          <div class="full">
+            <label>Typ wniosku *</label>
+            <select id="typWniosku" onchange="toggleWniosekType()" required>
+              <option value="odmowa">Odmowa przyjęcia mandatu</option>
+              <option value="sprawa">Sprawa przekazana do sądu</option>
+            </select>
+          </div>
+
+          <div id="wniosekOdmowa" class="full">
+            <div class="form">
+              <div>
+                <label>Data mandatu</label>
+                <input id="dataMandatu" type="date">
+              </div>
+              <div>
+                <label>Typ mandatu</label>
+                <input id="typMandatu" placeholder="np. drogowy">
+              </div>
+              <div>
+                <label>Kwota mandatu</label>
+                <input id="kwotaMandatu" type="number" min="0" step="1">
+              </div>
+              <div></div>
+              <div class="full">
+                <label>Powód odmowy *</label>
+                <textarea id="powodOdmowa" required></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div id="wniosekSad" class="full" style="display:none">
+            <div class="form">
+              <div>
+                <label>Data i czas zdarzenia *</label>
+                <input id="dataCzasZdarzeniaSad" type="datetime-local">
+              </div>
+              <div>
+                <label>Miejsce</label>
+                <input id="miejsceSad">
+              </div>
+              <div class="full">
+                <label>Kwalifikacja / podstawa</label>
+                <textarea id="kwalifikacjaSad"></textarea>
+              </div>
+              <div class="full">
+                <label>Opis sprawy *</label>
+                <textarea id="opisSad"></textarea>
+              </div>
+              <div class="full">
+                <label>Dowody (linki / opis)</label>
+                <textarea id="dowodySad"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div id="statusWniosek" class="status">—</div>
+
+          <div class="actions">
+            <button class="btn btn-primary" type="submit">
+              <span class="meta"><strong>Wyślij wniosek</strong><span>Discord</span></span><span class="chev">→</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIN GATE -->
+  <div id="lock" class="lock">
+    <div class="lock-panel">
+      <div class="lock-head"><h3>Autoryzacja dostępu — MTP</h3><p>KWP GDAŃSK · Wymagany identyfikator i PIN</p></div>
+      <div class="lock-body">
+        <div><label for="officerSelect">Funkcjonariusz</label><select id="officerSelect"></select></div>
+        <div>
+          <label for="pinInput">PIN</label>
+          <input id="pinInput" type="password" inputmode="numeric" placeholder="••••" maxlength="12" autocomplete="off">
+          <div id="statusGate" class="small">—</div>
+        </div>
+        <div class="lock-actions">
+          <button id="loginBtn" class="btn btn-primary" type="button"><span class="meta"><strong>Zaloguj</strong><span>PIN</span></span><span class="chev">↵</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

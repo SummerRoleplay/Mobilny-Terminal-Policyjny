@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Dyżurny — MTP</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+
+<body data-board="true">
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="brand">
+      <img src="./KWP.png">
+      <div>
+        <h1>System Dyżurnego — KWP GDAŃSK</h1>
+        <p>Summer RP · MTP</p>
+      </div>
+    </div>
+
+    <div class="topbar">
+      <div id="sessionBadge" class="badge"></div>
+      <button onclick="location.href='./index.html'" class="btn btn-ghost">⬅ Powrót</button>
+    </div>
+  </div>
+
+  <!-- STATUS / POWIADOMIENIA -->
+  <div id="notify" class="card" style="display:none;">
+    <div class="card-inner">
+      <div id="notifyText" class="status"></div>
+    </div>
+  </div>
+
+  <!-- NOWY PATROL -->
+  <div class="card">
+    <div class="card-inner">
+      <div class="card-title">
+        <h2>Nowy patrol</h2>
+        <small>Start służby</small>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="patrol-grid">
+        <div>
+          <label>Nr boczny</label>
+          <input id="patrolId">
+        </div>
+
+        <div>
+          <label>Pojazd</label>
+          <input id="pojazd">
+        </div>
+
+        <div class="full">
+          <button class="btn btn-primary" onclick="addPatrol()">Uruchom służbę</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKŁAD -->
+  <div class="card">
+    <div class="card-inner">
+      <div class="card-title">
+        <h2>Skład patrolu</h2>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="patrol-grid">
+        <div>
+          <label>Funkcjonariusz</label>
+          <select id="officerSelect"></select>
+        </div>
+
+        <div>
+          <label>Patrol</label>
+          <select id="assignedPatrol"></select>
+        </div>
+
+        <div class="full">
+          <button class="btn" onclick="assignOfficer()">Dodaj</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTA -->
+  <div class="card">
+    <div class="card-inner">
+      <div class="card-title">
+        <h2>Status patroli</h2>
+      </div>
+
+      <div class="hr"></div>
+
+      <div id="patrolList"></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="./app.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  // 🔐 SESSION CHECK
+  const session = JSON.parse(localStorage.getItem("mtp_session_v2") || "null");
+  if (!session || !session.isBoard) {
+    alert("Brak dostępu");
+    location.href = "./index.html";
+    return;
+  }
+
+  // 👮 OFFICERS SAFE LOAD
+  const officersData = window.OFFICERS ?? [];
+
+  // 📦 STATE
+  let patrols = JSON.parse(localStorage.getItem("patrols_v5") || "[]");
+
+  // 🎨 STATUS CONFIG (teraz używane)
+  const STATUS_CONFIG = {
+    "Dostępny": { color: "#2ecc71" },
+    "Niedostępny": { color: "#ff4d4d" },
+    "Zadysponowany": { color: "#4aa3ff" },
+    "Podjęcie interwencji": { color: "#ffcc66" },
+    "Interwencja własna": { color: "#f39c12" },
+    "Przerwa": { color: "#95a5a6" },
+    "Transport": { color: "#9b59b6" },
+    "Konwój": { color: "#8e44ad" },
+    "Zabezpieczenie": { color: "#1abc9c" },
+    "Brak łączności": { color: "#e74c3c" }
+  };
+
+  // 🔔 NOTIFY
+  function notify(msg, type = "ok") {
+    const box = document.getElementById("notify");
+    const text = document.getElementById("notifyText");
+    if (!box || !text) return;
+
+    box.style.display = "block";
+    text.textContent = msg;
+
+    text.className = "status";
+    if (type === "ok") text.classList.add("status-success");
+    if (type === "err") text.classList.add("status-error");
+
+    setTimeout(() => box.style.display = "none", 2500);
+  }
+
+  // ⏱ FORMAT
+  function formatTime(ms) {
+    const s = Math.floor(ms / 1000);
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    return [h, m, sec].map(v => v < 10 ? "0" + v : v).join(":");
+  }
+
+  // 💾 SAVE
+  function save() {
+    localStorage.setItem("patrols_v5", JSON.stringify(patrols));
+  }
+
+  // 👮 LOAD OFFICERS
+  function loadOfficers() {
+    const sel = document.getElementById("officerSelect");
+    if (!sel) return;
+
+    sel.innerHTML = officersData.length
+      ? officersData.map(o =>
+          `<option value="${o.id}">${o.id} — ${o.rank ?? "brak rangi"} — ${o.name}</option>`
+        ).join("")
+      : `<option disabled>Brak funkcjonariuszy</option>`;
+  }
+
+  // ➕ ADD PATROL
+  window.addPatrol = function () {
+    const id = document.getElementById("patrolId")?.value?.trim();
+    const pojazd = document.getElementById("pojazd")?.value?.trim();
+
+    if (!id || !pojazd) return notify("Uzupełnij dane", "err");
+
+    const now = Date.now();
+
+    patrols.push({
+      id: "GD-" + id,
+      pojazd,
+      status: "Dostępny",
+      officers: [],
+      start: now,
+      statusStart: now
+    });
+
+    save();
+    render();
+    notify("Patrol uruchomiony");
+  };
+
+  // 👮 ASSIGN OFFICER
+  window.assignOfficer = function () {
+    const officerId = document.getElementById("officerSelect")?.value;
+    const patrolId = document.getElementById("assignedPatrol")?.value;
+
+    if (!officerId || !patrolId) return notify("Wybierz dane", "err");
+
+    const p = patrols.find(x => x.id === patrolId);
+    if (!p) return;
+
+    if (!p.officers.includes(officerId)) {
+      p.officers.push(officerId);
+      save();
+      render();
+      notify("Dodano funkcjonariusza");
+    }
+  };
+
+  // ❌ REMOVE OFFICER
+  window.removeOfficer = function (i, id) {
+    if (!patrols[i]) return;
+    patrols[i].officers = patrols[i].officers.filter(x => x !== id);
+    save();
+    render();
+    notify("Usunięto z patrolu");
+  };
+
+  // 🔄 STATUS CHANGE
+  window.changeStatus = function (i, val) {
+    if (!patrols[i]) return;
+    patrols[i].status = val;
+    patrols[i].statusStart = Date.now();
+    save();
+    render();
+    notify("Zmiana statusu");
+  };
+
+  // ❌ DELETE PATROL
+  window.deletePatrol = function (i) {
+    patrols.splice(i, 1);
+    save();
+    render();
+    notify("Patrol zakończony", "err");
+  };
+
+  // 🎨 RENDER
+  function render() {
+    const list = document.getElementById("patrolList");
+    const assigned = document.getElementById("assignedPatrol");
+
+    if (!list || !assigned) return;
+
+    list.innerHTML = "";
+
+    patrols.forEach((p, i) => {
+
+      const officersNames = p.officers.map(id => {
+        const o = officersData.find(x => x.id === id);
+        return o ? o.name : id;
+      });
+
+      const div = document.createElement("div");
+      div.className = "patrol-status";
+
+      const color = STATUS_CONFIG[p.status]?.color || "#ccc";
+
+      div.innerHTML = `
+        <div class="patrol-left">
+          <div class="patrol-meta">
+            <strong>${p.id}</strong>
+            <span class="muted">${p.pojazd}</span>
+            <span class="muted">Służba: <b class="time" data="${p.start}"></b></span>
+            <span class="muted">Status: <b class="time2" data="${p.statusStart}"></b></span>
+          </div>
+
+          <span class="pill" style="background:${color}">
+            ${p.status}
+          </span>
+        </div>
+
+        <div class="patrol-actions">
+          <select onchange="changeStatus(${i},this.value)">
+            ${Object.keys(STATUS_CONFIG).map(s =>
+              `<option ${p.status === s ? "selected" : ""}>${s}</option>`
+            ).join("")}
+          </select>
+
+          <button class="btn" onclick="deletePatrol(${i})">Zakończ</button>
+        </div>
+      `;
+
+      const crew = document.createElement("div");
+
+      officersNames.forEach((name, idx) => {
+        const tag = document.createElement("span");
+        tag.className = "pill";
+        tag.style.marginRight = "6px";
+        tag.innerText = name + " ✖";
+        tag.onclick = () => removeOfficer(i, p.officers[idx]);
+        crew.appendChild(tag);
+      });
+
+      div.appendChild(crew);
+      list.appendChild(div);
+    });
+
+    assigned.innerHTML = patrols
+      .map(p => `<option>${p.id}</option>`)
+      .join("");
+  }
+
+  // ⏱ LIVE TIMER
+  setInterval(() => {
+    const now = Date.now();
+
+    document.querySelectorAll(".time").forEach(el => {
+      el.textContent = formatTime(now - el.dataset.data);
+    });
+
+    document.querySelectorAll(".time2").forEach(el => {
+      el.textContent = formatTime(now - el.dataset.data);
+    });
+
+  }, 1000);
+
+  // INIT
+  loadOfficers();
+  render();
+
+});
+</script>
+</body>
+</html>

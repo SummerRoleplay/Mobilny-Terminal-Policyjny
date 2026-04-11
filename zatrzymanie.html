@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTP — Zatrzymanie</title>
+  <link rel="icon" href="./KWP.png">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="brand">
+        <img src="./KWP.png" alt="KWP">
+        <div><h1>MTP — Protokół zatrzymania</h1><p>KWP GDAŃSK · Summer RP</p></div>
+      </div>
+      <div class="topbar">
+        <div id="sessionBadge" class="badge"><span class="dot warn"></span>Brak sesji</div>
+        <a class="btn btn-ghost" href="./index.html"><span class="meta"><strong>Powrót</strong><span>Panel</span></span><span class="chev">←</span></a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-title"><h2>Protokół</h2><small>Webhook: Raport</small></div>
+        <div class="hr"></div>
+
+        <form id="zatrzymanieForm" class="form" onsubmit="event.preventDefault(); sendZatrzymanieProtocol();">
+          <div class="full">
+            <label>Data i czas zatrzymania *</label>
+            <input id="dataCzasZatrzymania" type="datetime-local" required>
+          </div>
+
+          <div>
+            <label>Funkcjonariusz *</label>
+            <input id="funkcjonariuszZatrzymanie" required placeholder="Uzupełni się po logowaniu">
+          </div>
+          <div>
+            <label>Nick funkcjonariusza (OOC) *</label>
+            <input id="nickFuncZatrzymanie" required>
+          </div>
+
+          <div>
+            <label>Osoba zatrzymana (IC) *</label>
+            <input id="osobaZatrzymanaIC" required>
+          </div>
+          <div>
+            <label>ID / Dowód</label>
+            <input id="idDowodZatrzymanie">
+          </div>
+
+          <div class="full">
+            <label>Miejsce zatrzymania *</label>
+            <input id="miejsceZatrzymania" required>
+          </div>
+
+          <div class="full">
+            <label>Powód zatrzymania *</label>
+            <textarea id="powodZatrzymania" required></textarea>
+          </div>
+
+          <div class="full">
+            <label>Zabezpieczone przedmioty</label>
+            <textarea id="zabezpieczonePrzedmioty"></textarea>
+          </div>
+
+          <div>
+            <label>Czas trwania</label>
+            <input id="czasTrwaniaZatrzymania" placeholder="np. 30 min">
+          </div>
+          <div>
+            <label>Data sporządzenia</label>
+            <input id="dataSporzadzeniaZatrzymania" type="date">
+          </div>
+
+          <div class="full">
+            <label>Uwagi</label>
+            <textarea id="uwagiZatrzymanie"></textarea>
+          </div>
+
+          <div id="statusZatrzymanie" class="status">—</div>
+
+          <div class="actions">
+            <button class="btn btn-primary" type="submit">
+              <span class="meta"><strong>Wyślij protokół</strong><span>Discord</span></span><span class="chev">→</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIN GATE -->
+  <div id="lock" class="lock">
+    <div class="lock-panel">
+      <div class="lock-head"><h3>Autoryzacja dostępu — MTP</h3><p>KWP GDAŃSK · Wymagany identyfikator i PIN</p></div>
+      <div class="lock-body">
+        <div><label for="officerSelect">Funkcjonariusz</label><select id="officerSelect"></select></div>
+        <div>
+          <label for="pinInput">PIN</label>
+          <input id="pinInput" type="password" inputmode="numeric" placeholder="••••" maxlength="12" autocomplete="off">
+          <div id="statusGate" class="small">—</div>
+        </div>
+        <div class="lock-actions">
+          <button id="loginBtn" class="btn btn-primary" type="button"><span class="meta"><strong>Zaloguj</strong><span>PIN</span></span><span class="chev">↵</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

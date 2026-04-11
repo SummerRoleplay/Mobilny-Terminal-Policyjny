@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTP | KWP GDAŃSK — Summer RP</title>
+  <link rel="icon" href="./KWP.png">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <div class="brand">
+        <img src="./KWP.png" alt="KWP">
+        <div>
+          <h1>Mobilny Terminal Policyjny — KWP GDAŃSK</h1>
+          <p>Summer RP · MTP</p>
+        </div>
+      </div>
+
+      <div class="topbar">
+        <div id="sessionBadge" class="badge">
+          <span class="dot warn"></span>Brak sesji
+        </div>
+
+        <button id="logoutBtn" class="btn btn-ghost" type="button">
+          <span class="meta">
+            <strong>Wyloguj</strong>
+            <span>Zakończ sesję</span>
+          </span>
+          <span class="chev">⎋</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-inner">
+
+        <div class="card-title">
+          <h2>Panel główny</h2>
+          <small>Wybierz moduł</small>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="tabs">
+
+          <a class="btn" href="./mandat.html">
+            <span class="meta">
+              <strong>Wystaw mandat</strong>
+              <span>Mandaty</span>
+            </span>
+            <span class="chev">→</span>
+          </a>
+
+          <a class="btn" href="./wniosek.html">
+            <span class="meta">
+              <strong>Wniosek do sądu</strong>
+              <span>Dokumentacja</span>
+            </span>
+            <span class="chev">→</span>
+          </a>
+
+          <a class="btn" href="./raporty.html">
+            <span class="meta">
+              <strong>Raporty</strong>
+              <span>Patrol / Interwencja</span>
+            </span>
+            <span class="chev">→</span>
+          </a>
+
+          <a class="btn" href="./zatrzymanie.html">
+            <span class="meta">
+              <strong>Protokół zatrzymania</strong>
+              <span>Czynności</span>
+            </span>
+            <span class="chev">→</span>
+          </a>
+
+        </div>
+
+        <!-- ZARZĄD -->
+        <div id="zarzadLinks" style="display:none; margin-top:14px;">
+
+          <div class="hr"></div>
+
+          <div class="card-title" style="margin-bottom:10px;">
+            <h2>Panel Zarządu</h2>
+            <small>Dostęp ograniczony</small>
+          </div>
+
+          <div class="tabs">
+
+            <a class="btn btn-primary" href="./adaptacja.html">
+              <span class="meta">
+                <strong>ZARZĄD: Adaptacja</strong>
+                <span>Wyniki adaptacji</span>
+              </span>
+              <span class="chev">→</span>
+            </a>
+
+            <a class="btn btn-primary" href="./nagany.html">
+              <span class="meta">
+                <strong>ZARZĄD: Nagany</strong>
+                <span>Dyscyplina</span>
+              </span>
+              <span class="chev">→</span>
+            </a>
+
+            <a class="btn btn-primary" href="./pochwaly.html">
+              <span class="meta">
+                <strong>ZARZĄD: Pochwały</strong>
+                <span>Wyróżnienia</span>
+              </span>
+              <span class="chev">→</span>
+            </a>
+
+            <a class="btn btn-primary" href="./awanse.html">
+              <span class="meta">
+                <strong>ZARZĄD: Awanse</strong>
+                <span>Zmiany stopni</span>
+              </span>
+              <span class="chev">→</span>
+            </a>
+
+            <a class="btn btn-primary" href="./zwolnienia.html">
+              <span class="meta">
+                <strong>ZARZĄD: Zwolnienia</strong>
+                <span>Decyzje końcowe</span>
+              </span>
+              <span class="chev">→</span>
+            </a>
+
+            <a class="btn btn-primary" href="./psychologiczne.html">
+              <span class="meta">
+                <strong>ZARZĄD: Badania psychologiczne</strong>
+                <span>Skierowanie funkcjonariusza</span>
+              </span>
+              <span class="chev">→</span>
+            </a>
+
+            <a class="btn btn-primary" href="./dyzurny.html">
+  <span class="meta">
+    <strong>ZARZĄD: Dyżurny</strong>
+    <span>System patroli</span>
+  </span>
+  <span class="chev">→</span>
+            </a>
+          </div>
+        </div>
+        <!-- /ZARZĄD -->
+
+      </div>
+    </div>
+  </div>
+
+  <!-- PIN GATE -->
+  <div id="lock" class="lock">
+
+    <div class="lock-panel">
+
+      <div class="lock-head">
+        <h3>Autoryzacja dostępu — MTP</h3>
+        <p>KWP GDAŃSK · Wymagany identyfikator i PIN</p>
+      </div>
+
+      <div class="lock-body">
+
+        <div>
+          <label for="officerSelect">Numer legitymacji (ID)</label>
+          <input id="officerSelect" type="text" placeholder="Wpisz numer legitymacji (ID)">
+        </div>
+
+        <div>
+          <label for="pinInput">PIN</label>
+          <input id="pinInput" type="password" inputmode="numeric" placeholder="••••" maxlength="12" autocomplete="off">
+          <div id="statusGate" class="small">—</div>
+        </div>
+
+        <div class="lock-actions">
+          <button id="loginBtn" class="btn btn-primary" type="button">
+            <span class="meta">
+              <strong>Zaloguj</strong>
+              <span>Weryfikacja PIN</span>
+            </span>
+            <span class="chev">↵</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+
+</body>
+</html>

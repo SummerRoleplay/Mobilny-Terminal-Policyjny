@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTP — Zarząd: Nagany</title>
+  <link rel="icon" href="./KWP.png">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body data-board="true">
+  <div class="container">
+    <div class="header">
+      <div class="brand">
+        <img src="./KWP.png" alt="KWP">
+        <div><h1>ZARZĄD MTP — Nagany / Dyscyplina</h1><p>Tylko dla zarządu</p></div>
+      </div>
+      <div class="topbar">
+        <div id="sessionBadge" class="badge"><span class="dot warn"></span>Brak sesji</div>
+        <button id="logoutBtn" class="btn btn-ghost" type="button">Wyloguj</button>
+        <a class="btn btn-ghost" href="./index.html">Powrót</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-title"><h2>Nagana</h2><small>Webhook: zarząd-nagany</small></div>
+        <div class="hr"></div>
+
+        <form id="naganyForm" class="form">
+          <div><label>Funkcjonariusz *</label><input id="targetName" required></div>
+          <div><label>ID *</label><input id="targetId" required></div>
+
+          <div class="full"><label>Powód *</label><textarea id="reason" required></textarea></div>
+          <div><label>Kara / środek *</label><input id="penalty" required placeholder="np. upomnienie, nagana, zawieszenie"></div>
+          <div><label>Autor (ZARZĄD)</label><input id="autorBoard"></div>
+
+          <div class="full"><label>Dowody / linki</label><textarea id="evidence"></textarea></div>
+
+          <div id="statusNagany" class="status full">—</div>
+          <div class="actions"><button class="btn btn-primary" type="submit">Wyślij</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="lock" class="lock">
+    <div class="lock-panel">
+      <div class="lock-head"><h3>Autoryzacja dostępu — MTP</h3><p>Wymagany identyfikator i PIN</p></div>
+      <div class="lock-body">
+        <div><label>Funkcjonariusz</label><select id="officerSelect"></select></div>
+        <div><label>PIN</label><input id="pinInput" type="password" inputmode="numeric" maxlength="12"><div id="statusGate" class="small">—</div></div>
+        <div class="lock-actions"><button id="loginBtn" class="btn btn-primary" type="button">Zaloguj</button></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

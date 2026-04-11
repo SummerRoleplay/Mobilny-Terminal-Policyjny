@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTP — Raporty</title>
+  <link rel="icon" href="./KWP.png">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="brand">
+        <img src="./KWP.png" alt="KWP">
+        <div><h1>MTP — Raporty</h1><p>Patrol / Interwencja</p></div>
+      </div>
+      <div class="topbar">
+        <div id="sessionBadge" class="badge"><span class="dot warn"></span>Brak sesji</div>
+        <a class="btn btn-ghost" href="./index.html"><span class="meta"><strong>Powrót</strong><span>Panel</span></span><span class="chev">←</span></a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-title"><h2>Raport</h2><small>Webhook: Raport</small></div>
+        <div class="hr"></div>
+
+        <div class="form">
+          <div class="full">
+            <label>Rodzaj raportu</label>
+            <select id="rodzajRaportu" onchange="toggleRaportType()">
+              <option value="patrol">Patrol</option>
+              <option value="interwencja">Interwencja</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="patrolFields" class="card" style="margin-top:12px">
+          <div class="card-inner">
+            <div class="card-title"><h2>Patrol</h2><small>Wysyłka przyciskiem</small></div>
+            <div class="hr"></div>
+
+            <div class="form">
+              <div><label>Data służby</label><input id="dataSluzby" type="date"></div>
+              <div><label>Czas trwania</label><input id="czasTrwania" placeholder="np. 2h 30m"></div>
+              <div class="full"><label>Skład patrolu</label><textarea id="skladPatrolu"></textarea></div>
+              <div><label>Obszar patrolu</label><input id="obszarPatrolu"></div>
+              <div><label>Sporządził</label><input id="sporadzilPatrol" placeholder="Uzupełni się po logowaniu"></div>
+              <div class="full"><label>Wykonane czynności</label><textarea id="czynnosciPatrolu"></textarea></div>
+              <div class="full"><label>Incydenty</label><textarea id="incydentyPatrolu"></textarea></div>
+              <div class="full"><label>Uwagi</label><textarea id="uwagiPatrolu"></textarea></div>
+              <div><label>Data sporządzenia</label><input id="dataSporzadzeniaPatrol" type="date"></div>
+              <div></div>
+
+              <div id="statusRaportPatrol" class="status full">—</div>
+
+              <div class="actions">
+                <button class="btn btn-primary" type="button" onclick="sendPatrolReport()">
+                  <span class="meta"><strong>Wyślij raport patrolu</strong><span>Discord</span></span><span class="chev">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="interwencjaFields" class="card" style="margin-top:12px; display:none">
+          <div class="card-inner">
+            <div class="card-title"><h2>Interwencja</h2><small>Wysyłka przyciskiem</small></div>
+            <div class="hr"></div>
+
+            <div class="form">
+              <div class="full"><label>Data i czas</label><input id="dataCzasInterw" type="datetime-local"></div>
+              <div><label>Miejsce</label><input id="miejsceInterw"></div>
+              <div><label>Zgłoszenie</label><input id="zgloszenieInterw"></div>
+              <div class="full"><label>Funkcjonariusze</label><textarea id="funkcjonariuszeInterw"></textarea></div>
+              <div class="full"><label>Opis</label><textarea id="opisInterw"></textarea></div>
+              <div class="full"><label>Zatrzymane osoby</label><textarea id="zatrzymaneOsoby"></textarea></div>
+              <div class="full"><label>Dowody</label><textarea id="dowodyInterw"></textarea></div>
+              <div class="full"><label>Uwagi</label><textarea id="uwagiInterw"></textarea></div>
+              <div><label>Sporządził</label><input id="sporadzilInterw" placeholder="Uzupełni się po logowaniu"></div>
+              <div><label>Data sporządzenia</label><input id="dataSporzadzeniaInterw" type="date"></div>
+
+              <div id="statusRaportInterw" class="status full">—</div>
+
+              <div class="actions">
+                <button class="btn btn-primary" type="button" onclick="sendInterwReport()">
+                  <span class="meta"><strong>Wyślij raport interwencji</strong><span>Discord</span></span><span class="chev">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- PIN GATE -->
+  <div id="lock" class="lock">
+    <div class="lock-panel">
+      <div class="lock-head"><h3>Autoryzacja dostępu — MTP</h3><p>KWP GDAŃSK · Wymagany identyfikator i PIN</p></div>
+      <div class="lock-body">
+        <div><label for="officerSelect">Funkcjonariusz</label><select id="officerSelect"></select></div>
+        <div>
+          <label for="pinInput">PIN</label>
+          <input id="pinInput" type="password" inputmode="numeric" placeholder="••••" maxlength="12" autocomplete="off">
+          <div id="statusGate" class="small">—</div>
+        </div>
+        <div class="lock-actions">
+          <button id="loginBtn" class="btn btn-primary" type="button"><span class="meta"><strong>Zaloguj</strong><span>PIN</span></span><span class="chev">↵</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
