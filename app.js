@@ -808,6 +808,7 @@ async function sendZatrzymanieProtocol(){
     const miejsce = $("miejsceZatrzymania")?.value?.trim() || "—";
     const powod = $("powodZatrzymania")?.value?.trim() || "—";
     const zabezp = $("zabezpieczonePrzedmioty")?.value?.trim() || "Brak";
+    const prokurator = $("prokuratorZatrzymanie")?.value?.trim() || "Brak / Nie powiadomiono"; // <--- NOWE POLE
     const czasTrw = $("czasTrwaniaZatrzymania")?.value?.trim() || "—";
     const uwagi = $("uwagiZatrzymanie")?.value?.trim() || "Brak";
     const dataSporz = $("dataSporzadzeniaZatrzymania")?.value || new Date().toLocaleDateString("pl-PL");
@@ -828,6 +829,7 @@ async function sendZatrzymanieProtocol(){
         { name:"Miejsce", value:clamp(miejsce,900) },
         { name:"Powód", value:clamp(powod,900) },
         { name:"Zabezpieczone przedmioty", value:clamp(escList(zabezp),900) },
+        { name:"Powiadomiony prokurator", value:clamp(prokurator,128) }, // <--- NOWE POLE W EMBEDZIE
         { name:"Czas trwania", value:clamp(czasTrw,128) },
         { name:"Uwagi", value:clamp(uwagi,900) },
         { name:"Podpis (IC)", value:`**${clamp(funkcjonariusz,256)}**\nData: **${dataSporz}**` }
