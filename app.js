@@ -19,23 +19,24 @@ const webhookPsychologiczne = "https://discord.com/api/webhooks/1480281220779606
 // Przypisanie do window. gwarantuje widoczność w HTML
 // ===============================
 window.OFFICERS = [
-    { id: "480101", name: "Michał Nowacki",   rank: "Inspektor",           pin: "4827", isBoard: true },
-    { id: "480202", name: "Michał Zieliński", rank: "Młodszy Inspektor",   pin: "9042", isBoard: true },
-    { id: "480303", name: "Anna Nowak",       rank: "Podinspektor",        pin: "0711", isBoard: true },
-    { id: "480404", name: "Aleksander Trok",  rank: "Podinspektor",        pin: "1568", isBoard: true },
-    { id: "480505", name: "Leonard Bielik",   rank: "Komisarz",            pin: "7394", isBoard: true },
+    { id: "480101", name: "Michał Nowacki",         rank: "Inspektor",             pin: "4827", isBoard: true },
+    { id: "480202", name: "Michał Zieliński",       rank: "Młodszy Inspektor",     pin: "9042", isBoard: true },
+    { id: "480303", name: "Anna Nowak",             rank: "Podinspektor",          pin: "0711", isBoard: true },
+    { id: "480404", name: "Aleksander Trok",        rank: "Podinspektor",          pin: "1568", isBoard: true },
+    { id: "480505", name: "Leonard Bielik",         rank: "Komisarz",              pin: "7394", isBoard: true },
     { id: "480606", name: "Mariusz Tarkowski",      rank: "Starszy Aspirant",      pin: "3175" },
-    { id: "480707", name: "Bartłomiej Kowalewski",  rank: "Sierżant",              pin: "6281" },
+    { id: "480707", name: "Bartłomiej Kowalewski",  rank: "Podkomisarz",           pin: "6281" },
     { id: "480808", name: "Hubert Jogurt",          rank: "Starszy Posterunkowy",  pin: "8459" },
     { id: "480909", name: "Ignacy Borowski",        rank: "Posterunkowy",          pin: "2706" },
-    { id: "481010", name: "Kamil Brzoza",           rank: "Posterunkowy",          pin: "5913" },
+    { id: "481010", name: "Kamil Brzoza",           rank: "Starszy Posterunkowy",  pin: "5913" },
     { id: "481111", name: "Szymon Klacz",           rank: "Posterunkowy",          pin: "7630" },
     { id: "481212", name: "Kamil Wojciechowski",    rank: "Posterunkowy",          pin: "4182" },
     { id: "481313", name: "Tomasz Dunczyk",         rank: "Posterunkowy",          pin: "6053" },
     { id: "481414", name: "Dawid Bieg",             rank: "Posterunkowy",          pin: "5365" },
     { id: "481515", name: "Aleksander Polkowski",   rank: "Posterunkowy",          pin: "1129" },
     { id: "481616", name: "Krzysztof Zielinski",    rank: "Sierżant",              pin: "2486" },
-    { id: "481717", name: "Mariusz Tarkowski",      rank: "Posterunkowy",          pin: "9071" }
+    { id: "481717", name: "Mariusz Tarkowski",      rank: "Posterunkowy",          pin: "9071" },
+    { id: "481818", name: "Mateusz Kowalski",       rank: "Posterunkowy",          pin: "5360" }
 ];
 
 const SESSION_KEY = "mtp_session_v2";
