@@ -26,7 +26,7 @@ window.OFFICERS = [
     { id: "480505", name: "Leonard Bielik",         rank: "Komisarz",              pin: "7394", isBoard: true },
     { id: "480606", name: "Mariusz Tarkowski",      rank: "Starszy Aspirant",      pin: "3175" },
     { id: "480707", name: "Bartłomiej Kowalewski",  rank: "Podkomisarz",           pin: "6281" },
-    { id: "480808", name: "Hubert Jogurt",          rank: "Starszy Posterunkowy",  pin: "8459" },
+    { id: "480808", name: "Hubert Jogurt",          rank: "Sierżant",              pin: "8459" },
     { id: "480909", name: "Ignacy Borowski",        rank: "Posterunkowy",          pin: "2706" },
     { id: "481010", name: "Kamil Brzoza",           rank: "Starszy Posterunkowy",  pin: "5913" },
     { id: "481111", name: "Szymon Klacz",           rank: "Posterunkowy",          pin: "7630" },
@@ -36,7 +36,8 @@ window.OFFICERS = [
     { id: "481515", name: "Aleksander Polkowski",   rank: "Posterunkowy",          pin: "1129" },
     { id: "481616", name: "Krzysztof Zielinski",    rank: "Sierżant",              pin: "2486" },
     { id: "481717", name: "Mariusz Tarkowski",      rank: "Posterunkowy",          pin: "9071" },
-    { id: "481818", name: "Mateusz Kowalski",       rank: "Posterunkowy",          pin: "5360" }
+    { id: "481818", name: "Mateusz Kowalski",       rank: "Posterunkowy",          pin: "5360" },
+    { id: "481919", name: "Mariusz Mortadelski",    rank: "Posterunkowy",          pin: "7485" }
 ];
 
 const SESSION_KEY = "mtp_session_v2";
