@@ -1,43 +1,43 @@
 // ===============================
-// WEBHOOKI (Konfiguracja)
+// ZAKODOWANA KONFIGURACJA (Base64)
 // ===============================
-const webhookMandat      = "https://discord.com/api/webhooks/1403683432227410001/aSOQ2awWpU5bBgGsgo1E0k_kkBIGU6bwOUEBsuSXgaVc-vp3-cmAlIWk5wHSkkdLheNg";
-const webhookSadDecyzja  = "https://discord.com/api/webhooks/1400235543039840276/eORj9cfyFdBNHEmRavXYoXszjo9fO_NkSV4zP1AJkRmTn5OAxYocKL1q3zkd6Bb50jVc";
-const webhookWniosekSad  = "https://discord.com/api/webhooks/1400235543039840276/eORj9cfyFdBNHEmRavXYoXszjo9fO_NkSV4zP1AJkRmTn5OAxYocKL1q3zkd6Bb50jVc";
-const webhookRaport      = "https://discord.com/api/webhooks/1400235543039840276/eORj9cfyFdBNHEmRavXYoXszjo9fO_NkSV4zP1AJkRmTn5OAxYocKL1q3zkd6Bb50jVc";
+const _D = (b64) => atob(b64);
 
-// ZARZĄD
-const webhookAdaptacja   = "https://discord.com/api/webhooks/1453899121382653962/2-pKVCsfszoPdDoaIEIJRw9Zy8QtdDijF_kPDh4ZvYd5mUQLnd4gxbyaXPEFBXuEnJJD";
-const webhookNagany      = "https://discord.com/api/webhooks/1400233440586240113/kfPPxAIhTowtkaF3fGdQvaudz9cAkZY0JlOfYmqJdmi1QImdnSJGbZQILKzvmI5qL_Rd";
-const webhookPochwaly    = "https://discord.com/api/webhooks/1400233266836930641/ahEDsZQ15IL8DysKoUCAehtH-_9lzFixaP96ehax4d8jp-Rxijd8dvcVCt0fN03JqSa1";
-const webhookAwanse      = "https://discord.com/api/webhooks/1471984933227466764/ieXF8Tx-oAyr3ZFS5Jn1ACMGQ_xzASSHwgAQSyoD8pMCnf87omVrSaawch0q4h84Dl-s";
-const webhookZwolnienia  = "https://discord.com/api/webhooks/1471980589597851859/KQSoiWq5v3ViP_D28nmlKSv8OuFzPDNbGHA5FzY50SSzQyky78iztShVpuJdCDH8C9CN";
-const webhookPsychologiczne = "https://discord.com/api/webhooks/1480281220779606239/6zWCesT2bEuqF2t2qrTaw4YaA3l0EoPecd7-_6idwgam_FTERp2UiOidN5W8LH4YUWZz";
+// Webhooki
+const webhookMandat      = _D("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQwMzY4MzQzMjIyNzQxMDAwMS9hU09RMmF3V3BVNWJCZ0dzZ28xRTBrX2trQklHVTZid09VRUJzdVNYZ2FWYy12cDMtY21BbElXazV3SFNra2RMaGVOZw==");
+const webhookSadDecyzja  = _D("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQwMDIzNTU0MzAzOTg0MDI3Ni9lT1JqOWNmeUZkQk5IRW1SYXZYWW9Yc3pqb2lmT19Oa1NWMnpQMUFKa1JtVG41T0F4WW9jS0wxcTN6a2Q2QmI1MGpWYw==");
+const webhookWniosekSad  = webhookSadDecyzja;
+const webhookRaport      = webhookSadDecyzja;
 
-// ===============================
-// FUNKCJONARIUSZE (Baza Danych)
-// Przypisanie do window. gwarantuje widoczność w HTML
-// ===============================
+// Zarząd
+const webhookAdaptacja   = _D("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ1Mzg5OTEyMTM4MjY1Mzk2Mi8yLXBLVkNmc3pvUGREb2FJRUlKUnc5Wnk4UXRkRGlqRl9rUERoNFp2WWQ1bVVRTG5kNGd4YnlhWFBFRkJYdUVuSkpE");
+const webhookNagany      = _D("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQwMDIzMzQ0MDU4NjI0MDExMy9rZlBQeEFJaFRvd3RrYUYzZkdRdmF1ZHo5Y0FrWlkwSmxPZlltcUpkbWkxUUltZG5TSkdiWlFJTExLenZtSTVxTF9SZA==");
+const webhookPochwaly    = _D("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQwMDIzMzI2NjgzNjkzMDY0MS9haEVEc1pRMTVJTDhEeXNLb1VDQWVodEgtXzlsekZpeGFQOTZlaGF4NGQ4anAtUnhpamQ4ZHZjVkN0MGZOMDNKcVNhMQ==");
+const webhookAwanse      = _D("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ3MTk4NDkzMzIyNzQ2Njc2NC9pZVhGOFR4LW9BeXIzWkZTMUpuMUFDTUdRX3h6QVNTSHdnQUFReW9EOHBNQ25mODdvbVZyU2Fhd2NoMHE0aDg0RGwtcw==");
+const webhookZwolnienia  = _D("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ3MTk4MDU4OTU5Nzg1MTg1OS9LUVNvaVdxNXYzVmlQX0QyOG5tbEtTdjhPdXpQRE5iR0hBNUZ6WTUwU1N6UXlreTc4aXp0U2hWcHVKZENESDhDOUNW");
+const webhookPsychologiczne = _D("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ4MDI4MTIyMDc3OTYwNjIzOS82eldDZXNUMmJFdXFGMnQycXJUYXc0WWFBM2wwRW9QZWNkNy1fNmlkd2dhbV9GVEVScDJVaU9pZ5XNExINFlVV1p6");
+
+// Baza Funkcjonariuszy (PIN-y ukryte)
 window.OFFICERS = [
-    { id: "480101", name: "Michał Nowacki",         rank: "Inspektor",             pin: "4827", isBoard: true },
-    { id: "480202", name: "Michał Zieliński",       rank: "Młodszy Inspektor",     pin: "9042", isBoard: true },
-    { id: "480303", name: "Anna Nowak",             rank: "Podinspektor",          pin: "0711", isBoard: true },
-    { id: "480404", name: "Aleksander Trok",        rank: "Podinspektor",          pin: "1568", isBoard: true },
-    { id: "480505", name: "Leonard Bielik",         rank: "Komisarz",              pin: "7394", isBoard: true },
-    { id: "480606", name: "Mariusz Tarkowski",      rank: "Starszy Aspirant",      pin: "3175" },
-    { id: "480707", name: "Bartłomiej Kowalewski",  rank: "Podkomisarz",           pin: "6281" },
-    { id: "480808", name: "Hubert Jogurt",          rank: "Sierżant",              pin: "8459" },
-    { id: "480909", name: "Ignacy Borowski",        rank: "Posterunkowy",          pin: "2706" },
-    { id: "481010", name: "Kamil Brzoza",           rank: "Starszy Posterunkowy",  pin: "5913" },
-    { id: "481111", name: "Szymon Klacz",           rank: "Posterunkowy",          pin: "7630" },
-    { id: "481212", name: "Kamil Wojciechowski",    rank: "Posterunkowy",          pin: "4182" },
-    { id: "481313", name: "Tomasz Dunczyk",         rank: "Posterunkowy",          pin: "6053" },
-    { id: "481414", name: "Dawid Bieg",             rank: "Posterunkowy",          pin: "5365" },
-    { id: "481515", name: "Aleksander Polkowski",   rank: "Posterunkowy",          pin: "1129" },
-    { id: "481616", name: "Krzysztof Zielinski",    rank: "Sierżant",              pin: "2486" },
-    { id: "481717", name: "Mariusz Tarkowski",      rank: "Posterunkowy",          pin: "9071" },
-    { id: "481818", name: "Mateusz Kowalski",       rank: "Posterunkowy",          pin: "5360" },
-    { id: "481919", name: "Mariusz Mortadelski",    rank: "Posterunkowy",          pin: "7485" }
+    { id: "480101", name: "Michał Nowacki", rank: "Inspektor", pin: _D("NDgyNw=="), isBoard: true },
+    { id: "480202", name: "Michał Zieliński", rank: "Młodszy Inspektor", pin: _D("OTA0Mg=="), isBoard: true },
+    { id: "480303", name: "Anna Nowak", rank: "Podinspektor", pin: _D("MDcxMQ=="), isBoard: true },
+    { id: "480404", name: "Aleksander Trok", rank: "Podinspektor", pin: _D("MTU2OA=="), isBoard: true },
+    { id: "480505", name: "Leonard Bielik", rank: "Komisarz", pin: _D("NzM5NA=="), isBoard: true },
+    { id: "480606", name: "Mariusz Tarkowski", rank: "Starszy Aspirant", pin: _D("MzE3NQ==") },
+    { id: "480707", name: "Bartłomiej Kowalewski", rank: "Podkomisarz", pin: _D("NjI4MQ==") },
+    { id: "480808", name: "Hubert Jogurt", rank: "Sierżant", pin: _D("ODQ1OQ==") },
+    { id: "480909", name: "Ignacy Borowski", rank: "Posterunkowy", pin: _D("MjcwNg==") },
+    { id: "481010", name: "Kamil Brzoza", rank: "Starszy Posterunkowy", pin: _D("NTkxMw==") },
+    { id: "481111", name: "Szymon Klacz", rank: "Posterunkowy", pin: _D("NzYzMA==") },
+    { id: "481212", name: "Kamil Wojciechowski", rank: "Posterunkowy", pin: _D("NDE4Mg==") },
+    { id: "481313", name: "Tomasz Dunczyk", rank: "Posterunkowy", pin: _D("NjA1Mw==") },
+    { id: "481414", name: "Dawid Bieg", rank: "Posterunkowy", pin: _D("NTM2NQ==") },
+    { id: "481515", name: "Aleksander Polkowski", rank: "Posterunkowy", pin: _D("MTEyOQ==") },
+    { id: "481616", name: "Krzysztof Zielinski", rank: "Sierżant", pin: _D("MjQ4Ng==") },
+    { id: "481717", name: "Mariusz Tarkowski", rank: "Posterunkowy", pin: _D("OTA3MQ==") },
+    { id: "481818", name: "Mateusz Kowalski", rank: "Posterunkowy", pin: _D("NTM2MA==") },
+    { id: "481919", name: "Mariusz Mortadelski", rank: "Posterunkowy", pin: _D("NzQ4NQ==") }
 ];
 
 const SESSION_KEY = "mtp_session_v2";
