@@ -1,48 +1,44 @@
-const _k = "S3cur1ty_P0l1c3_2024"; // Klucz szyfrujący
+// ===============================
+// WEBHOOKI
+// ===============================
+const webhookMandat      = atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQwMzY4MzQzMjIyNzQxMDAwMS9hU09RMmF3V3BVNWJCZ0dzZ28xRTBrX2trQklHVTZid09VRUJzdVNYZ2FWYy12cDMtY21BbElXazV3SFNra2RMaGVOZw==");
+const webhookSadDecyzja  = atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQwMDIzNTU0MzAzOTg0MDI3Ni9lT1JqOWNmeUZkQk5IRW1SYXZYWW9Yc3pqbzlmT19Oa1NWMHpQMUFKa1JtVG41T0F4WW9jS0wxcTN6a2Q2QmI1MGpWYw==");
+const webhookWniosekSad  = atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQwMDIzNTU0MzAzOTg0MDI3Ni9lT1JqOWNmeUZkQk5IRW1SYXZYWW9Yc3pqbzlmT19Oa1NWMHpQMUFKa1JtVG41T0F4WW9jS0wxcTN6a2Q2QmI1MGpWYw==");
+const webhookRaport      = atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQwMDIzNTU0MzAzOTg0MDI3Ni9lT1JqOWNmeUZkQk5IRW1SYXZYWW9Yc3pqbzlmT19Oa1NWMHpQMUFKa1JtVG41T0F4WW9jS0wxcTN6a2Q2QmI1MGpWYw==");
 
-const _D = (data) => {
-    const s = atob(data);
-    return s.split('').map((char, i) => 
-        String.fromCharCode(char.charCodeAt(0) ^ _k.charCodeAt(i % _k.length))
-    ).join('');
-};
+// ZARZĄD
+const webhookAdaptacja   = atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ1Mzg5OTEyMTM4MjY1Mzk2Mi8yLXBLVkNzZnN6b1BkRG9hSUVJSlJ3OVp5OFF0ZERpakZfa1BEaDRadllkNW1VUUxuZDRneGJ5YVhQRUZCWHVFbkpKRA==");
+const webhookNagany      = atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQwMDIzMzQ0MDU4NjI0MDExMy9rZlBPeEFJaFRvd3RrYUYzZkdkUXZhdWR6OWNBa1pZMEpsT2ZZbXFKZG1pMVFJbWRuU0pHYlpRSUxLenZtSTVxTF9SZA==");
+const webhookPochwaly    = atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQwMDIzMzI2NjgzNjkzMDY0MS9haEVEc1pRMTVJTDhEeXNLb1VDQWVodEgtXzlsekZpeGFQOTZlaGF4NGQ4anAtUnhpamQ4ZHZjVkN0MGZOMDNKcVNhMQ==");
+const webhookAwanse      = atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ3MTk4NDkzMzIyNzQ2Njc2NC9pZVhGOFR4LW9BeXIzWkZTNUpuMUFDTUdRX3h6QVNTSHdnQVFTeW9EOHBNQ25mODdvbVZyU2Fhd2NoMHE0aDg0RGwtcw==");
+const webhookZwolnienia  = atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ3MTk4MDU4OTU5Nzg1MTg1OS9LUVNvaVdxNXYzVmlQX0QyOG5tbEtTdjhPdUZ6UEROYkdIQTVGelk1MFNTelF5a3k3OGl6dFNoVnB1SmRDREg4QzlDTg==");
+const webhookPsychologiczne = atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ4MDI4MTIyMDc3OTYwNjIzOS82eldDZXNUMmJFdXFGMnQycXJUYXc0WWFBM2wwRW9QZWNkNy1fNmlkd2dhbV9GVEVScDJVaU9pZE41VzhMSDRZVVdadg==");
 
-// Webhooki (Zaszyfrowane)
-const webhookMandat      = _D("HRECHx0SExYVDB0fEx0VHB9YExYfCBwXGRYcEBYXFxoXGx9YExYfCR0XGRYREBcXGB0XGx9YEBYVDB0XGRYREBYXFxoXGx9YExYfCh0XGRYREBcXGB0XGx9YEBYV");
-const webhookSadDecyzja  = _D("HRECHx0SExYVDB0fEx0VHB9YExYfCBwXGRYcEBYXFxoXGx9YExYfCR0XGRYREBcXGB0XGx9YEBYVDB0XGRYREBYXFxoXGx9YExYfCh0XGRYREBcXGB0XGx9YEBYV");
-const webhookWniosekSad  = webhookSadDecyzja;
-const webhookRaport      = webhookSadDecyzja;
-
-// Zarząd
-const webhookAdaptacja   = _D("HRECHx0SExYVDB0fEx0VHB9YExYfCBwXGRYcEBYXFxoXGx9YExYfCR0XGRYREBcXGB0XGx9YEBYVDB0XGRYREBYXFxoXGx9YExYfCh0XGRYREBcXGB0XGx9YEBYV");
-const webhookNagany      = _D("HRECHx0SExYVDB0fEx0VHB9YExYfCBwXGRYcEBYXFxoXGx9YExYfCR0XGRYREBcXGB0XGx9YEBYVDB0XGRYREBYXFxoXGx9YExYfCh0XGRYREBcXGB0XGx9YEBYV");
-const webhookPochwaly    = _D("HRECHx0SExYVDB0fEx0VHB9YExYfCBwXGRYcEBYXFxoXGx9YExYfCR0XGRYREBcXGB0XGx9YEBYVDB0XGRYREBYXFxoXGx9YExYfCh0XGRYREBcXGB0XGx9YEBYV");
-const webhookAwanse      = _D("HRECHx0SExYVDB0fEx0VHB9YExYfCBwXGRYcEBYXFxoXGx9YExYfCR0XGRYREBcXGB0XGx9YEBYVDB0XGRYREBYXFxoXGx9YExYfCh0XGRYREBcXGB0XGx9YEBYV");
-const webhookZwolnienia  = _D("HRECHx0SExYVDB0fEx0VHB9YExYfCBwXGRYcEBYXFxoXGx9YExYfCR0XGRYREBcXGB0XGx9YEBYVDB0XGRYREBYXFxoXGx9YExYfCh0XGRYREBcXGB0XGx9YEBYV");
-const webhookPsychologiczne = _D("HRECHx0SExYVDB0fEx0VHB9YExYfCBwXGRYcEBYXFxoXGx9YExYfCR0XGRYREBcXGB0XGx9YEBYVDB0XGRYREBYXFxoXGx9YExYfCh0XGRYREBcXGB0XGx9YEBYV");
-
-// Baza Funkcjonariuszy
+// ===============================
+// FUNKCJONARIUSZE
+// ===============================
 window.OFFICERS = [
-    { id: "480101", name: "Michał Nowacki", rank: "Inspektor", pin: _D("VAsXFw=="), isBoard: true },
-    { id: "480202", name: "Michał Zieliński", rank: "Młodszy Inspektor", pin: _D("XxwVHg=="), isBoard: true },
-    { id: "480303", name: "Anna Nowak", rank: "Podinspektor", pin: _D("UhoXFQ=="), isBoard: true },
-    { id: "480404", name: "Aleksander Trok", rank: "Podinspektor", pin: _D("UAsVHA=="), isBoard: true },
-    { id: "480505", name: "Leonard Bielik", rank: "Komisarz", pin: _D("XRwbFQ=="), isBoard: true },
-    { id: "480606", name: "Mariusz Tarkowski", rank: "Starszy Aspirant", pin: _D("WBsXFA==") },
-    { id: "480707", name: "Bartłomiej Kowalewski", rank: "Podkomisarz", pin: _D("WRwVFA==") },
-    { id: "480808", name: "Hubert Jogurt", rank: "Sierżant", pin: _D("XxwVHA==") },
-    { id: "480909", name: "Ignacy Borowski", rank: "Posterunkowy", pin: _D("WBsXGw==") },
-    { id: "481010", name: "Kamil Brzoza", rank: "Starszy Posterunkowy", pin: _D("VBsXGw==") },
-    { id: "481111", name: "Szymon Klacz", rank: "Posterunkowy", pin: _D("XRwcFw==") },
-    { id: "481212", name: "Kamil Wojciechowski", rank: "Posterunkowy", pin: _D("VAsVHA==") },
-    { id: "481313", name: "Tomasz Dunczyk", rank: "Posterunkowy", pin: _D("WRwXFw==") },
-    { id: "481414", name: "Dawid Bieg", rank: "Posterunkowy", pin: _D("VBsVHw==") },
-    { id: "481515", name: "Aleksander Polkowski", rank: "Posterunkowy", pin: _D("UAsVHg==") },
-    { id: "481616", name: "Krzysztof Zielinski", rank: "Sierżant", pin: _D("WBsVFA==") },
-    { id: "481717", name: "Mariusz Tarkowski", rank: "Posterunkowy", pin: _D("XxwVFw==") },
-    { id: "481818", name: "Mateusz Kowalski", rank: "Posterunkowy", pin: _D("VBsVHg==") },
-    { id: "481919", name: "Mariusz Mortadelski", rank: "Posterunkowy", pin: _D("XRwbHg==") }
+    { id: "480101", name: "Michał Nowacki",         rank: "Inspektor",         pin: atob("NDgyNw=="), isBoard: true },
+    { id: "480202", name: "Michał Zieliński",       rank: "Młodszy Inspektor", pin: atob("OTA0Mg=="), isBoard: true },
+    { id: "480303", name: "Anna Nowak",             rank: "Podinspektor",      pin: atob("MDcxMQ=="), isBoard: true },
+    { id: "480404", name: "Aleksander Trok",        rank: "Podinspektor",      pin: atob("MTU2OA=="), isBoard: true },
+    { id: "480505", name: "Leonard Bielik",         rank: "Komisarz",          pin: atob("NzM5NA=="), isBoard: true },
+    { id: "480606", name: "Mariusz Tarkowski",      rank: "Starszy Aspirant",  pin: atob("MzE3NQ==") },
+    { id: "480707", name: "Bartłomiej Kowalewski",  rank: "Podkomisarz",       pin: atob("NjI4MQ==") },
+    { id: "480808", name: "Hubert Jogurt",          rank: "Sierżant",          pin: atob("ODQ1OQ==") },
+    { id: "480909", name: "Ignacy Borowski",        rank: "Posterunkowy",      pin: atob("MjcwNg==") },
+    { id: "481010", name: "Kamil Brzoza",           rank: "Posterunkowy",      pin: atob("NTkxMw==") },
+    { id: "481111", name: "Szymon Klacz",           rank: "Posterunkowy",      pin: atob("NzYzMA==") },
+    { id: "481212", name: "Kamil Wojciechowski",    rank: "Posterunkowy",      pin: atob("NDE4Mg==") },
+    { id: "481313", name: "Tomasz Dunczyk",         rank: "Posterunkowy",      pin: atob("NjA1Mw==") },
+    { id: "481414", name: "Dawid Bieg",             rank: "Posterunkowy",      pin: atob("NTM2NQ==") },
+    { id: "481515", name: "Aleksander Polkowski",   rank: "Posterunkowy",      pin: atob("MTEyOQ==") },
+    { id: "481616", name: "Krzysztof Zielinski",    rank: "Sierżant",          pin: atob("MjQ4Ng==") },
+    { id: "481717", name: "Mariusz Tarkowski",      rank: "Posterunkowy",      pin: atob("OTA3MQ==") },
+    { id: "481818", name: "Mateusz Kowalski",       rank: "Posterunkowy",      pin: atob("OTA3MQ==") },
+    { id: "481919", name: "Mariusz Mortadelski",    rank: "Posterunkowy",      pin: atob("NzQ4NQ==") }
 ];
+
 
 const SESSION_KEY = "mtp_session_v2";
 const SESSION_TTL_MIN = 180;
