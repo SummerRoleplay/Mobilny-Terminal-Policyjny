@@ -1,7 +1,7 @@
 // ===============================
 // WEBHOOKI
 // ===============================
-const webhookMandat      = atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQwMzY4MzQzMjIyNzQxMDAwMS9hU09RMmF3V3BVNWJCZ0dzZ28xRTBrX2trQklHVTZid09VRUJzdVNYZ2FWYy12cDMtY21BbElXazV3SFNra2RMaGVOZw==");
+const webhookMandat      = atob("https://discord.com/api/webhooks/1496771305335427172/nGX90yQCRqEW4uJKKZf9_vHqsBsW6f11mtushGpt1TESW6JoTlJeO9TD8F2jSnQRs22-");
 const webhookSadDecyzja  = atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQwMDIzNTU0MzAzOTg0MDI3Ni9lT1JqOWNmeUZkQk5IRW1SYXZYWW9Yc3pqbzlmT19Oa1NWMHpQMUFKa1JtVG41T0F4WW9jS0wxcTN6a2Q2QmI1MGpWYw==");
 const webhookWniosekSad  = atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQwMDIzNTU0MzAzOTg0MDI3Ni9lT1JqOWNmeUZkQk5IRW1SYXZYWW9Yc3pqbzlmT19Oa1NWMHpQMUFKa1JtVG41T0F4WW9jS0wxcTN6a2Q2QmI1MGpWYw==");
 const webhookRaport      = atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQwMDIzNTU0MzAzOTg0MDI3Ni9lT1JqOWNmeUZkQk5IRW1SYXZYWW9Yc3pqbzlmT19Oa1NWMHpQMUFKa1JtVG41T0F4WW9jS0wxcTN6a2Q2QmI1MGpWYw==");
